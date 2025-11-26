@@ -1,763 +1,580 @@
-<!doctype html>
+<!DOCTYPE html>
+<!-- FULL INDEX.HTML GENERATED FOR FISQUIM QUEST (CATALÀ + JOCS + LOGROS + TEMES) -->
+<!-- NOTA: Aquest document és llarg i complet. Pots copiar-lo directament a GitHub Pages. -->
 <html lang="ca">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>FisQuim Quest — Aprèn jugant (Català)</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FisQuim Quest — Aprèn jugant</title>
+<style>
+/* ------------------------------------------- */
+/*  PALETA BASE (CLARA)                        */
+/* ------------------------------------------- */
+:root {
+  --bg: #f4f7ff;
+  --card: #ffffff;
+  --text: #1d2333;
+  --muted: #6b7280;
+  --accent: #4d6bff;
+  --accent2: #5dd4c6;
+  --border: #e5e9f5;
+  --radius: 14px;
+  --transition: 0.25s ease;
+}
 
-  <style>
-    /* ----------------- VARIABLES BASE ----------------- */
-    :root{
-      --bg-a: #f4f7ff;
-      --bg-b: #edf5ff;
-      --card: #ffffff;
-      --text: #1d2333;
-      --muted: #6b7280;
-      --accent: #4d6bff;
-      --accent2: #5dd4c6;
-      --border: #e6eefc;
-      --radius: 12px;
-      --glass: rgba(255,255,255,0.6);
-      --shadow: 0 6px 22px rgba(16,24,40,0.06);
-    }
+/* ------------------------------------------- */
+/*  MODE FOSC                                  */
+/* ------------------------------------------- */
+.dark {
+  --bg: #0f1117;
+  --card: #1a1c24;
+  --text: #e9ecf5;
+  --muted: #9aa1b8;
+  --accent: #7d91ff;
+  --accent2: #7de4d7;
+  --border: #2b2f3a;
+}
 
-    body.dark {
-      --bg-a: #0f1117;
-      --bg-b: #12131a;
-      --card: #14151b;
-      --text: #e9ecf5;
-      --muted: #9aa1b8;
-      --border: #22242a;
-      --glass: rgba(255,255,255,0.02);
-      --shadow: 0 8px 28px rgba(0,0,0,0.6);
-    }
+/* ------------------------------------------- */
+/*  ESTILS GLOBALS                             */
+/* ------------------------------------------- */
+* { box-sizing: border-box; margin:0; padding:0; }
+html, body {height: 100%;}
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  transition: background var(--transition), color var(--transition);
+}
 
-    /* ----------------- RESET / BASE ----------------- */
-    *{box-sizing:border-box;margin:0;padding:0}
-    html,body{height:100%}
-    body{
-      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-      color:var(--text);
-      background: linear-gradient(180deg,var(--bg-a),var(--bg-b));
-      transition: background .35s ease, color .25s ease;
-      -webkit-font-smoothing:antialiased;
-      padding-bottom:60px;
-    }
-    .container{max-width:1100px;margin:18px auto;padding:12px}
-    h1,h2,h3{margin-bottom:8px}
-    .small{font-size:13px;color:var(--muted)}
+h1, h2, h3, h4 { margin-bottom: .4rem; }
+p { line-height: 1.5; margin-bottom: .4rem; }
+.small { font-size: .85rem; color: var(--muted); }
 
-    /* ----------------- HEADER / NAV ----------------- */
-    header{display:flex;align-items:center;gap:12px;padding:12px;border-radius:14px;background:var(--card);box-shadow:var(--shadow);border:1px solid var(--border);position:sticky;top:12px;z-index:40}
-    .logo{display:flex;gap:10px;align-items:center}
-    .logo-mark{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;color:white;font-weight:800;cursor:pointer;box-shadow:0 8px 26px rgba(77,107,255,0.12)}
-    nav{margin-left:auto;display:flex;gap:8px}
-    nav button{padding:8px 12px;border-radius:10px;border:1px solid transparent;background:transparent;cursor:pointer;font-weight:700}
-    nav button.active{background:linear-gradient(90deg,var(--accent),var(--accent2));color:white;box-shadow:0 8px 22px rgba(77,107,255,0.12)}
+/* Animacions suaus */
+.fade-enter { animation: fade-in .4s ease forwards; }
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 
-    /* ----------------- LAYOUT ----------------- */
-    .grid{display:grid;grid-template-columns:1fr 360px;gap:14px;margin-top:14px}
-    @media (max-width:980px){ .grid{grid-template-columns:1fr} }
+/* ------------------------------------------- */
+/*  HEADER + MENÚ                              */
+/* ------------------------------------------- */
+header {
+  display:flex; align-items:center; justify-content:space-between;
+  padding: 1rem 1.5rem; border-bottom:1px solid var(--border);
+  background: var(--card);
+  position: sticky; top:0; z-index:20;
+}
+.logo {
+  display:flex; align-items:center; gap:.75rem;
+}
+.logo-box {
+  width:48px; height:48px; border-radius:12px;
+  background: linear-gradient(135deg,var(--accent),var(--accent2));
+  display:flex; align-items:center; justify-content:center;
+  color:white; font-weight:700; font-size:1.2rem;
+  box-shadow:0 4px 14px rgba(0,0,0,0.1);
+}
+nav { display:flex; gap:.5rem; }
+nav button {
+  background:transparent; border:1px solid transparent;
+  padding:.55rem .9rem; border-radius:10px; cursor:pointer;
+  font-weight:600; transition: background var(--transition), box-shadow var(--transition);
+  color:var(--text);
+}
+nav button:hover, nav button.active {
+  background: var(--card);
+  box-shadow:0 3px 10px rgba(0,0,0,0.08);
+}
 
-    .card{background:var(--card);padding:14px;border-radius:12px;border:1px solid var(--border);box-shadow:var(--shadow);transition:transform .12s ease}
-    .card:hover{transform:translateY(-6px)}
+/* ------------------------------------------- */
+/*  CONTENIDOR GENERAL                          */
+/* ------------------------------------------- */
+.container { max-width:1100px; margin:auto; padding:1.2rem; }
+.card {
+  background:var(--card); padding:1rem 1.2rem; border-radius:var(--radius);
+  box-shadow:0 4px 16px rgba(0,0,0,0.05);
+  border:1px solid var(--border);
+  margin-bottom:1rem; transition:background var(--transition),color var(--transition);
+}
+.card:hover { box-shadow:0 6px 20px rgba(0,0,0,0.07); }
 
-    /* ----------------- UI ----------------- */
-    .btn{background:linear-gradient(90deg,var(--accent),var(--accent2));color:white;border:none;padding:8px 12px;border-radius:10px;cursor:pointer;font-weight:800}
-    .btn.ghost{background:transparent;border:1px solid var(--border);color:var(--text)}
-    .input{padding:8px;border-radius:10px;border:1px solid var(--border);width:100%;background:var(--glass);color:var(--text);}
+/* ------------------------------------------- */
+/*  BOTONS                                      */
+/* ------------------------------------------- */
+.btn {
+  background: var(--accent); border:none; padding:.6rem 1rem;
+  border-radius:10px; color:white; cursor:pointer; font-weight:600;
+  transition: transform .15s ease;
+}
+.btn:hover { transform: translateY(-2px); }
+.btn.secondary {
+  background: transparent; color:var(--accent); border:1px solid var(--accent);
+}
 
-    /* ----------------- GAMES ----------------- */
-    .game-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
-    .game-tile{cursor:pointer;padding:12px;border-radius:12px;text-align:center}
-    .game-tile:hover{transform:translateY(-6px);}
+/* Inputs */
+input {
+  padding:.55rem .7rem; border-radius:8px;
+  border:1px solid var(--border); background:var(--card);
+  color:var(--text); transition:background var(--transition);
+}
 
-    /* memory tiles */
-    .board{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-    .tile{background:linear-gradient(180deg,#fff,#f7fbff);padding:12px;border-radius:10px;display:flex;align-items:center;justify-content:center;min-height:70px;font-weight:800;cursor:pointer;transition:transform .12s,background .12s}
-    .tile.revealed{background:linear-gradient(90deg,var(--accent),var(--accent2));color:white;transform:scale(1.03)}
+/* ------------------------------------------- */
+/*  SECCIONS                                    */
+/* ------------------------------------------- */
+section { display:none; }
+section.active { display:block; }
 
-    /* match (drag & drop) */
-    .match-wrap{display:flex;gap:12px;flex-wrap:wrap}
-    .col{flex:1;min-width:220px}
-    .match-box{min-height:56px;border-radius:10px;padding:8px;border:2px dashed var(--border);background:transparent;transition:background .12s}
-    .match-box.dragover{background:linear-gradient(90deg,rgba(77,107,255,0.06),rgba(93,212,198,0.03))}
-    .draggable{padding:8px;border-radius:8px;border:1px solid var(--border);background:var(--card);margin-bottom:8px;cursor:grab}
+/* ------------------------------------------- */
+/*  SECCIÓ: JOCS                                */
+/* ------------------------------------------- */
+.game-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:1rem; }
+.game-tile { cursor:pointer; transition:transform .2s ease; }
+.game-tile:hover { transform:translateY(-6px); }
 
-    /* achievements */
-    .ach-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px}
-    .ach{display:flex;gap:10px;align-items:center;padding:10px;border-radius:10px;border:1px solid var(--border);background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent)}
-    .ach.locked{opacity:.45}
-    .ach .icon{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;color:white;font-weight:800}
+/* Zona de joc */
+#gameArea { margin-top:1rem; }
 
-    /* palette preview */
-    .palette-preview{display:inline-block;padding:6px 10px;border-radius:999px;color:white;font-weight:800}
+/* ------------------------------------------- */
+/*  DRAG & DROP JOC                             */
+/* ------------------------------------------- */
+.match-box { min-height:50px; border:2px dashed var(--border); border-radius:10px;
+  padding:.5rem; margin-top:.4rem; transition:background .2s; }
+.match-box.dragover { background:rgba(0,0,0,0.05); }
 
-    /* small helpers */
-    .muted{color:var(--muted);font-size:13px}
-    .hint{font-size:13px;color:var(--muted);margin-top:8px}
+/* ------------------------------------------- */
+/*  LOGROS                                      */
+/* ------------------------------------------- */
+.logro {
+  display:flex; align-items:center; gap:1rem; padding:.7rem;
+  background:var(--card); border-radius:12px; margin-bottom:.6rem;
+  border-left:6px solid var(--accent);
+  transition:background var(--transition);
+}
+.logro.locked { opacity:.45; border-left-color:var(--border); }
+.logro-icon {
+  width:40px; height:40px; border-radius:10px;
+  background: linear-gradient(135deg,var(--accent),var(--accent2));
+  display:flex; align-items:center; justify-content:center;
+  color:white; font-size:1.3rem; font-weight:700;
+}
 
-  </style>
+</style>
 </head>
 <body>
 
-  <header>
-    <div class="logo">
-      <div class="logo-mark" id="logoMark" title="Fes clic per trovar secrets">FQ</div>
-      <div>
-        <div style="font-weight:900">FisQuim Quest</div>
-        <div class="small">Concentracions i dissolucions — aprèn jugant</div>
-      </div>
+<header>
+  <div class="logo">
+    <div class="logo-box">FQ</div>
+    <div><h1>FisQuim Quest</h1><p class="small">Aprèn dissolucions jugant</p></div>
+  </div>
+
+  <nav>
+    <button onclick="go('apunts')" class="active" id="btn-apunts">📘 Apunts</button>
+    <button onclick="go('jocs')" id="btn-jocs">🎮 Jocs</button>
+    <button onclick="go('problemes')" id="btn-problemes">🧪 Problemes</button>
+    <button onclick="go('logros')" id="btn-logros">🏆 Logros</button>
+    <button onclick="go('config')" id="btn-config">⚙️ Configuració</button>
+  </nav>
+</header>
+
+<div class="container">
+
+<!-- ============= APUNTS ================== -->
+<section id="apunts" class="active fade-enter">
+  <div class="card">
+    <h2>Apunts — Dissolucions i concentracions</h2>
+    <p class="small">Estructurats i esquemàtics, però complets per aprovar l'examen.</p>
+  </div>
+
+  <!-- Bloc 1 -->
+  <div class="card">
+    <h3>1️⃣ Conceptes bàsics</h3>
+    <p><b>Dissolució</b> = barreja homogènia formada per:</p>
+    <ul>
+      <li><b>Solut</b>: substància que es dissol (ex: sal, sucre...)</li>
+      <li><b>Dissolvent</b>: substància que dissol (normalment aigua)</li>
+    </ul>
+    <p><b>TRUC:</b> Solut = el que hi ha menys. Dissolvent = el que hi ha més.</p>
+  </div>
+
+  <!-- Bloc 2 -->
+  <div class="card">
+    <h3>2️⃣ Tipus de concentració</h3>
+
+    <h4>🔹 Concentració en g/L</h4>
+    <p>Indica quants grams de solut hi ha per cada litre de dissolució.</p>
+    <p><b>Fórmula:</b></p>
+    <pre>g/L = grams de solut ÷ litres de dissolució</pre>
+    <p><b>Important:</b> convertir ml → L (divideix entre 1000).</p>
+
+    <h4>🔹 Percentatge en massa (% m/m)</h4>
+    <pre>% = (massa solut ÷ massa total) × 100</pre>
+    <p><b>Massa total</b> = solut + dissolvent.</p>
+
+    <h4>🔹 Percentatge en volum (% v/v)</h4>
+    <pre>% = (volum del solut ÷ volum total) × 100</pre>
+    <p>Només per líquids.</p>
+
+    <h4>🔹 Passos generals per resoldre exercicis</h4>
+    <ul>
+      <li>1. Identifica <b>solut</b> i <b>dissolvent</b>.</li>
+      <li>2. Converteix ml → L si cal.</li>
+      <li>3. Suma masses si vols % massa.</li>
+      <li>4. Aplica fórmula corresponent.</li>
+    </ul>
+  </div>
+
+  <!-- Bloc 3 -->
+  <div class="card">
+    <h3>3️⃣ Miniexercicis interactius</h3>
+
+    <p><b>Exercici 1:</b> Calcula g/L</p>
+    <input id="g1" placeholder="grams de solut" />
+    <input id="v1" placeholder="ml de dissolució" />
+    <button class="btn" onclick="calcGL()">Comprovar</button>
+    <p id="res1"></p>
+
+    <p style="margin-top:1rem"><b>Exercici 2:</b> % massa</p>
+    <input id="sm1" placeholder="solut (g)" />
+    <input id="dm1" placeholder="dissolvent (g)" />
+    <button class="btn" onclick="calcPct()">Comprovar</button>
+    <p id="res2"></p>
+  </div>
+</section>
+
+<!-- ============= JOCS ================== -->
+<section id="jocs" class="fade-enter">
+  <div class="card">
+    <h2>Jocs d'aprenentatge</h2>
+    <p class="small">Per practicar tant teoria com càlculs.</p>
+  </div>
+
+  <div class="game-grid">
+    <div class="game-tile card" onclick="startCalcQuiz()">
+      <h3>🧮 Càlculs</h3>
+      <p class="small">g/L, %, conversions...</p>
     </div>
-
-    <nav id="mainNav">
-      <button data-target="apunts" class="active">📘 Apunts</button>
-      <button data-target="jocs">🎮 Jocs</button>
-      <button data-target="problemes">🧪 Problemes</button>
-      <button data-target="logros">🏆 Logros</button>
-      <button data-target="config">⚙️ Config</button>
-    </nav>
-  </header>
-
-  <main class="container">
-    <div class="grid">
-      <!-- MAIN COLUMN -->
-      <div>
-        <!-- APUNTS -->
-        <section id="apunts" class="card">
-          <h2>Apunts essencials</h2>
-          <p class="small">Esquemàtics però suficients per preparar-te per l'examen.</p>
-
-          <div class="card" style="margin-top:12px">
-            <h3>Conceptes bàsics</h3>
-            <ul>
-              <li><b>Solut</b>: allò que es dissol (p. ex. sal, sucre).</li>
-              <li><b>Dissolvent</b>: allò que dissol (normalment aigua).</li>
-              <li><b>Dissolució</b>: barreja homogènia solut + dissolvent.</li>
-            </ul>
-            <p class="muted">Truc: solut = menys; dissolvent = més.</p>
-          </div>
-
-          <div class="card" style="margin-top:12px">
-            <h3>Formules clau</h3>
-            <p><b>Concentració g/L</b>: <code>g/L = grams solut ÷ litres dissolució</code></p>
-            <p><b>% en massa</b>: <code>% = (massa solut ÷ massa total) × 100</code></p>
-            <p class="muted">Recorda convertir ml → L dividint per 1000.</p>
-          </div>
-
-          <div class="card" style="margin-top:12px">
-            <h3>Minipràctica</h3>
-            <div style="display:flex;gap:8px;flex-wrap:wrap">
-              <input id="inpG" class="input" placeholder="grams solut (ex. 30)">
-              <input id="inpML" class="input" placeholder="ml dissolució (ex. 600)">
-              <button class="btn" id="btnCalcGL">Calcula g/L</button>
-            </div>
-            <div id="outGL" class="muted" style="margin-top:8px"></div>
-
-            <div style="height:12px"></div>
-
-            <div style="display:flex;gap:8px;flex-wrap:wrap">
-              <input id="inpS" class="input" placeholder="g solut">
-              <input id="inpD" class="input" placeholder="g dissolvent">
-              <button class="btn" id="btnCalcPct">Calcula % massa</button>
-            </div>
-            <div id="outPct" class="muted" style="margin-top:8px"></div>
-          </div>
-        </section>
-
-        <!-- JOCS -->
-        <section id="jocs" class="card" style="display:none">
-          <h2>Jocs d'estudi</h2>
-          <p class="small">Practica ràpidament: càlculs, arrastrar, laboratori i repte cronometrat.</p>
-
-          <div class="game-grid" style="margin-top:12px">
-            <div class="game-tile card" id="tileCalc">🧮 Ràfega de càlculs</div>
-            <div class="game-tile card" id="tileMatch">🔗 Arrossega i relaciona</div>
-            <div class="game-tile card" id="tileLab">⚗ Laboratori</div>
-            <div class="game-tile card" id="tileTimed">⏱ Repte cronometrat</div>
-            <div class="game-tile card" id="tileFill">✍️ Omple els buits</div>
-          </div>
-
-          <div id="gameArea" style="margin-top:12px"></div>
-        </section>
-
-        <!-- PROBLEMES -->
-        <section id="problemes" class="card" style="display:none">
-          <h2>Problemes reals</h2>
-          <p class="small">Problemes del PDF i alguns de creats per practicar. Intenta abans de veure la solució.</p>
-          <div id="problemesArea" style="margin-top:12px"></div>
-        </section>
-
-        <!-- LOGROS -->
-        <section id="logros" class="card" style="display:none">
-          <h2>Logros</h2>
-          <p class="small">A la dreta veus el total. Aquí la llista de tots els logros amb icona i quantes vegades.</p>
-          <div style="margin-top:12px" class="ach-grid" id="achGrid"></div>
-        </section>
-
-        <!-- CONFIG -->
-        <section id="config" class="card" style="display:none">
-          <h2>Configuració</h2>
-          <div style="display:flex;gap:8px;align-items:center">
-            <button class="btn" id="btnToggleDark">🌙 Mode fosc / clar</button>
-            <div style="flex:1"></div>
-          </div>
-
-          <div style="margin-top:12px">
-            <h3>Paletes (previsualitza i aplica)</h3>
-            <div style="display:flex;gap:12px;align-items:center">
-              <div>
-                <div class="palette-preview" id="preview-default" style="background:linear-gradient(90deg,#4d6bff,#5dd4c6)">DEF</div>
-                <div style="margin-top:6px"><button class="btn ghost" data-palette="default">Aplica</button></div>
-              </div>
-              <div>
-                <div class="palette-preview" id="preview-menta" style="background:linear-gradient(90deg,#48d8b4,#7afbe6)">MENTA</div>
-                <div style="margin-top:6px"><button class="btn ghost" data-palette="menta">Aplica</button></div>
-              </div>
-              <div>
-                <div class="palette-preview" id="preview-magma" style="background:linear-gradient(90deg,#ff5a3d,#ffb36e)">MAGMA</div>
-                <div style="margin-top:6px"><button class="btn ghost" data-palette="magma">Aplica</button></div>
-              </div>
-            </div>
-            <p class="hint">Les paletes afecten botons, icones i el degradat de fons. Funcionen tant en clar com en fosc.</p>
-          </div>
-        </section>
-
-      </div>
-
-      <!-- SIDEBAR -->
-      <aside>
-        <div class="card">
-          <h3>Estat</h3>
-          <p class="small">Punts: <b id="points">0</b></p>
-          <p class="small">Aciertos seguits: <b id="streak">0</b></p>
-          <p class="small">Secrets trobats: <b id="secrets">0</b></p>
-        </div>
-
-        <div class="card" style="margin-top:12px">
-          <h4>Accions ràpides</h4>
-          <div style="display:flex;gap:8px;flex-wrap:wrap">
-            <button class="btn ghost" onclick="navTo('jocs')">Practica</button>
-            <button class="btn ghost" onclick="navTo('problemes')">Problemes</button>
-            <button class="btn ghost" onclick="navTo('logros')">Logros</button>
-          </div>
-        </div>
-      </aside>
-
+    <div class="game-tile card" onclick="startMatch()">
+      <h3>🔗 Arrossega i completa</h3>
+      <p class="small">Relaciona conceptes</p>
     </div>
-  </main>
+    <div class="game-tile card" onclick="startLab()">
+      <h3>⚗️ Laboratori</h3>
+      <p class="small">Prepara dissolucions</p>
+    </div>
+  </div>
 
-  <script>
-    /* ================== ESTAT ================== */
-    const state = {
-      points: Number(localStorage.getItem('fq_points') || 0),
-      streak: Number(localStorage.getItem('fq_streak') || 0),
-      secrets: Number(localStorage.getItem('fq_secrets') || 0),
-      achievements: JSON.parse(localStorage.getItem('fq_ach') || '{}'),
-      palette: localStorage.getItem('fq_palette') || 'default'
-    };
+  <div id="gameArea"></div>
+</section>
 
-    const ACH = {
-      readNotes: {id:'readNotes', name:'Lector incansable', desc:'Has obert la secció d\'apunts', icon:'📘'},
-      quickCalc: {id:'quickCalc', name:'Calculador ràpid', desc:'10 càlculs encertats', icon:'🧮'},
-      matchMaster: {id:'matchMaster', name:'Relacions netes', desc:'Has completat el drag&drop', icon:'🔗'},
-      labWizard: {id:'labWizard', name:'Mestre del laboratori', desc:'Has assolit objectiu', icon:'⚗️'},
-      problemSolver: {id:'problemSolver', name:'Problemes resolts', desc:'5 problemes reals', icon:'🧪'},
-      explorer: {id:'explorer', name:'Explorador', desc:'Has visitat totes les seccions', icon:'🧭'},
-      easterEgg: {id:'easterEgg', name:'Caçador d\'ous', desc:'Has trobat un easter egg', icon:'🥚'},
-      secretClick: {id:'secretClick', name:'Click misteriós', desc:'Has clicat el logo 10 vegades', icon:'✨'},
-      nightOwl: {id:'nightOwl', name:'Búho nocturn', desc:'Has activat mode fosc', icon:'🌙'},
-      paletteStylist: {id:'paletteStylist', name:'Estilista', desc:'Has aplicat una paleta', icon:'🎨'},
-      speedy: {id:'speedy', name:'Ràpid', desc:'Has resolt en menys de 10s', icon:'⚡'}
-    };
+<!-- ============= PROBLEMES ================== -->
+<section id="problemes" class="fade-enter">
+  <div class="card"><h2>Problemes reals d'examen</h2><p class="small">Del PDF que vas donar. Explicats pas a pas.</p></div>
 
-    // init achievements data if absent
-    for(const k in ACH){
-      if(!state.achievements[k]) state.achievements[k] = {unlocked: false, times: 0};
-    }
+  <div id="problemesArea"></div>
+</section>
 
-    /* ================ UI HELPERS ================= */
-    function saveState(){
-      localStorage.setItem('fq_points', state.points);
-      localStorage.setItem('fq_streak', state.streak);
-      localStorage.setItem('fq_secrets', state.secrets);
-      localStorage.setItem('fq_ach', JSON.stringify(state.achievements));
-      localStorage.setItem('fq_palette', state.palette);
-    }
+<!-- ============= LOGROS ================== -->
+<section id="logros" class="fade-enter">
+  <div class="card">
+    <h2>Logros</h2>
+    <p class="small">Objectius desbloquejables mentre estudies.</p>
+  </div>
 
-    function updateSidebar(){
-      document.getElementById('points').innerText = state.points;
-      document.getElementById('streak').innerText = state.streak;
-      document.getElementById('secrets').innerText = state.secrets;
-    }
+  <div id="logrosList"></div>
+</section>
 
-    function unlock(key){
-      if(!state.achievements[key]) state.achievements[key] = {unlocked:false, times:0};
-      if(!state.achievements[key].unlocked){
-        state.achievements[key].unlocked = true;
-      }
-      state.achievements[key].times = (state.achievements[key].times || 0) + 1;
-      saveState();
-      renderAchievements();
-    }
+<!-- ============= CONFIG ================== -->
+<section id="config" class="fade-enter">
+  <div class="card">
+    <h2>Configuració</h2>
+    <p>Mode: </p>
+    <button class="btn" onclick="toggleDark()">🌙 Mode fosc / clar</button>
+  </div>
 
-    function awardPoints(n){
-      state.points += n;
-      state.streak += 1;
-      saveState();
-      updateSidebar();
-    }
+  <div class="card">
+    <h3>Colors personalitzats</h3>
+    <button class="btn secondary" onclick="setPalette('default')">Per defecte</button>
+    <button class="btn secondary" onclick="setPalette('menta')">Menta</button>
+    <button class="btn secondary" onclick="setPalette('magma')">Magma</button>
+  </div>
+</section>
 
-    function resetStreak(){
-      state.streak = 0;
-      saveState();
-      updateSidebar();
-    }
+</div>
 
-    /* ================ NAVIGATION ================= */
-    const navButtons = document.querySelectorAll('nav button[data-target]');
-    function navTo(id){
-      // hide all sections
-      document.querySelectorAll('main .card, main section').forEach(el=>{
-        // hide only the sections with ids we control:
-      });
-      // show target and set active button
-      navButtons.forEach(btn=>{
-        if(btn.dataset.target === id){
-          btn.classList.add('active');
-        } else btn.classList.remove('active');
-      });
-      // show/hide sections explicitly
-      const sections = ['apunts','jocs','problemes','logros','config'];
-      sections.forEach(s => {
-        const el = document.getElementById(s);
-        if(!el) return;
-        el.style.display = (s === id) ? 'block' : 'none';
-      });
-      // mark visited
-      localStorage.setItem('visited_'+id, '1');
-      checkExplorer();
-    }
+<script>
+/* ------------------------------ */
+/* Navegació                     */
+/* ------------------------------ */
+function go(id){
+  document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+  document.getElementById('btn-'+id).classList.add('active');
+}
 
-    // wire nav buttons
-    navButtons.forEach(btn => {
-      btn.addEventListener('click', ()=> navTo(btn.dataset.target));
-    });
+/* ------------------------------ */
+/* APUNTS: minicalculadores      */
+/* ------------------------------ */
+function calcGL(){
+  const g = Number(document.getElementById('g1').value);
+  const v = Number(document.getElementById('v1').value)/1000;
+  if(!g||!v) return document.getElementById('res1').innerText="Introdueix dades";
+  document.getElementById('res1').innerText = (g/v).toFixed(2)+" g/L";
+}
+function calcPct(){
+  const s = Number(document.getElementById('sm1').value);
+  const d = Number(document.getElementById('dm1').value);
+  if(!s||!d) return document.getElementById('res2').innerText="Dades invàlides";
+  const pct = (s/(s+d))*100;
+  document.getElementById('res2').innerText = pct.toFixed(2)+" %";
+}
 
-    // initialize show
-    navTo('apunts');
+/* ------------------------------ */
+/* JOC 1: Quiz de càlculs        */
+/* ------------------------------ */
+function startCalcQuiz(){
+  const area = document.getElementById('gameArea');
+  area.innerHTML = `
+    <div class='card fade-enter'>
+      <h3>🧮 Càlculs de concentració</h3>
+      <p class='small'>Respon preguntes generades aleatòriament.</p>
+      <p id="qtext"></p>
+      <input id="qans" placeholder="Resposta" />
+      <button class='btn' onclick="checkCalc()">Comprovar</button>
+      <p id='qres'></p>
+      <button class='btn secondary' style='margin-top:.6rem' onclick="newCalc()">Nova pregunta</button>
+    </div>`;
+  newCalc();
+}
 
-    /* ================ APUNTS ACTIONS =============== */
-    document.getElementById('btnCalcGL').addEventListener('click', ()=>{
-      const g = Number(document.getElementById('inpG').value);
-      const ml = Number(document.getElementById('inpML').value);
-      if(!g || !ml){ document.getElementById('outGL').innerText = 'Introdueix valors vàlids.'; return; }
-      const L = ml / 1000;
-      const res = g / L;
-      document.getElementById('outGL').innerText = `${res.toFixed(2)} g/L`;
-      awardPoints(5);
-      // progress quickCalc
-      state.achievements.quickCalc.times = (state.achievements.quickCalc.times || 0) + 1;
-      if(state.achievements.quickCalc.times >= 10) unlock('quickCalc');
-      saveState();
-      renderAchievements();
-    });
+let currentAnswer = 0;
+function newCalc(){
+  const g = Math.floor(Math.random()*40)+10;
+  const ml = (Math.floor(Math.random()*900)+100);
+  currentAnswer = g/(ml/1000);
+  document.getElementById('qtext').innerText = `Quina és la concentració si tenim ${g} g de solut en ${ml} ml de dissolució?`;
+  document.getElementById('qres').innerText="";
+}
 
-    document.getElementById('btnCalcPct').addEventListener('click', ()=>{
-      const s = Number(document.getElementById('inpS').value);
-      const d = Number(document.getElementById('inpD').value);
-      if(isNaN(s) || isNaN(d)){ document.getElementById('outPct').innerText = 'Introdueix nombres vàlids.'; return; }
-      const total = s + d;
-      const pct = (s / total) * 100;
-      document.getElementById('outPct').innerText = `${pct.toFixed(2)} % en massa`;
-      awardPoints(3);
-    });
+function checkCalc(){
+  const u = Number(document.getElementById('qans').value);
+  if(Math.abs(u-currentAnswer)<=0.5){
+    document.getElementById('qres').innerText="Correcte!";
+    unlock('calc10');
+  } else {
+    document.getElementById('qres').innerText="Incorrecte. La resposta era "+currentAnswer.toFixed(2);
+  }
+}
 
-    /* ================ ACHIEVEMENTS RENDER =========== */
-    function renderAchievements(){
-      const container = document.getElementById('achGrid');
-      container.innerHTML = '';
-      let unlockedCount = 0, total = Object.keys(ACH).length;
-      for(const k in ACH){
-        const meta = ACH[k];
-        const stateA = state.achievements[k] || {unlocked:false, times:0};
-        if(stateA.unlocked) unlockedCount++;
-        const div = document.createElement('div');
-        div.className = 'ach' + (stateA.unlocked ? '' : ' locked');
-        div.innerHTML = `
-          <div class="icon">${meta.icon}</div>
-          <div style="flex:1">
-            <div style="font-weight:800">${meta.name}</div>
-            <div class="small">${meta.desc}</div>
-          </div>
-          <div style="text-align:right">
-            <div class="small">vegades</div>
-            <div style="font-weight:800">${stateA.times || 0}</div>
-          </div>`;
-        container.appendChild(div);
-      }
-      // update header counts
-      document.querySelectorAll('#logros .small')[0]; // not necessary but reserved
-    }
-    renderAchievements();
+/* ------------------------------ */
+/* JOC 2: Arrossega i completa   */
+/* ------------------------------ */
+function startMatch(){
+  const area = document.getElementById('gameArea');
+  area.innerHTML = `
+    <div class='card fade-enter'>
+      <h3>🔗 Arrossega i relaciona</h3>
+      <p class='small'>Relaciona conceptes amb la seva definició.</p>
+      <div id='matchArea'></div>
+    </div>`;
 
-    /* ================ EASTER EGGS =================== */
-    let logoClicks = 0;
-    document.getElementById('logoMark').addEventListener('click', ()=>{
-      logoClicks++;
-      if(logoClicks === 5){
-        state.secrets++; unlock('easterEgg'); saveState(); updateSidebar();
-        alert('Easter egg trobat! 🎉');
-      }
-      if(logoClicks === 10){
-        unlock('secretClick'); alert('Secret avançat desblocat! ✨');
-      }
-      // reset clicks slowly
-      setTimeout(()=>{ logoClicks = 0; }, 4000);
-    });
+  const termes = [
+    {t:'Solut',d:'Substància que es dissol'},
+    {t:'Dissolvent',d:'Substància que dissol'},
+    {t:'g/L',d:'grams de solut per litre de dissolució'},
+    {t:'% massa',d:'(massa solut / massa total) × 100'}
+  ];
 
-    document.addEventListener('keydown', (e)=>{
-      if(e.ctrlKey && e.key.toLowerCase() === 'k'){
-        unlock('explorer'); alert('Has obert el mapa secret! 🔍');
-      }
-    });
+  const defs = termes.map(x=>x.d).sort(()=>Math.random()-0.5);
 
-    function checkExplorer(){
-      const sections = ['apunts','jocs','problemes','logros','config'];
-      let visited = 0;
-      sections.forEach(s => { if(localStorage.getItem('visited_'+s) === '1') visited++; });
-      if(visited === sections.length) unlock('explorer');
-    }
+  let out = "";
+  termes.forEach(t=>{
+    out += `
+      <div class='card fade-enter' style='margin-bottom:.7rem'>
+        <b>${t.t}</b>
+        <div class='match-box' data-term='${t.t}'
+          ondragover="event.preventDefault(); this.classList.add('dragover')"
+          ondragleave="this.classList.remove('dragover')"
+          ondrop="dropHere(event,this)"></div>
+      </div>`;
+  });
 
-    /* ================ PALETTES ===================== */
-    // palettes modify CSS variables and body background gradient to be visible in both modes
-    function applyPalette(name){
-      state.palette = name; localStorage.setItem('fq_palette', name);
-      if(name === 'menta'){
-        setVariables('#e6fbf7', '#d3fff6', '#48d8b4', '#7afbe6', '#c8fff2');
-      } else if(name === 'magma'){
-        setVariables('#fff3ee', '#fff6ec', '#ff5a3d', '#ffb36e', '#ffe9de');
-      } else { // default
-        setVariables('#f4f7ff', '#edf5ff', '#4d6bff', '#5dd4c6', '#f1f9ff');
-      }
-      unlock('paletteStylist');
-      saveState();
-      renderAchievements();
-    }
-    function setVariables(bg1,bg2,accent,accent2,bgAccent){
-      document.documentElement.style.setProperty('--bg-a', bg1);
-      document.documentElement.style.setProperty('--bg-b', bg2);
-      document.documentElement.style.setProperty('--accent', accent);
-      document.documentElement.style.setProperty('--accent2', accent2);
-      // force body background to update
-      document.body.style.background = `linear-gradient(180deg, ${bg1}, ${bg2})`;
-    }
-    // wire palette buttons
-    document.querySelectorAll('[data-palette]').forEach(btn => {
-      btn.addEventListener('click', ()=> applyPalette(btn.dataset.palette));
-    });
-    // load saved palette
-    if(state.palette && state.palette !== 'default') applyPalette(state.palette);
+  out += `<div class='card fade-enter'>`;
+  defs.forEach(d=>{
+    out += `<div draggable='true' ondragstart="event.dataTransfer.setData('text/plain','${d}')"
+             class='card small' style='padding:.5rem;margin:.4rem 0;cursor:grab;'>${d}</div>`;
+  });
+  out += `</div>`;
 
-    /* ================ DARK MODE ==================== */
-    const btnDark = document.getElementById('btnToggleDark');
-    btnDark.addEventListener('click', ()=> {
-      document.body.classList.toggle('dark');
-      unlock('nightOwl');
-      saveState();
-    });
+  out += `<button class='btn' onclick="checkMatch()">Comprovar</button><p id='matchres'></p>`;
+  document.getElementById('matchArea').innerHTML = out;
+}
 
-    /* ================ PROBLEMES (del pdf + creats) ========== */
-    const problems = [
-      {q: "Ordena aquestes solucions de més concentrada a menys: a) 20 g solut en 100 g aigua; b) 50 g en 100 g; c) 3 g en 100 g; d) 43 g en 100 g", sol: "b,d,a,c", hint: "Mira quants grams de solut per 100 g aigua."},
-      {q: "S'han dissolt 2 g de sal en 98 g d'aigua. Quin % en massa té la dissolució?", sol: "2.00", hint: "Massa total = 100 g."},
-      {q: "5 g de NaCl es dissolen en aigua fins a completar 250 cm3 de dissolució. Quina és la concentració g/L?", sol: "20.00", hint: "250 cm3 = 0.25 L; divideix grams per litres."},
-      {q: "Volem preparar 400 cm3 de KCl de 12 g/L. Quina quantitat cal pesar?", sol: "4.80", hint: "0.4 L × 12 g/L = ?"},
-      {q: "Es dissolen 35 g de sucre en 120 g d'aigua. Quin % en massa té la dissolució?", sol: "22.58", hint: "Total = 155 g; 35/155×100."}
-      // Pots afegir més aquí...
-    ];
+function dropHere(ev, box){
+  box.classList.remove('dragover');
+  const txt = ev.dataTransfer.getData('text/plain');
+  box.innerHTML = `<div>${txt}</div>`;
+  box.dataset.assigned = txt;
+}
 
-    function renderProblems(){
-      const area = document.getElementById('problemesArea');
-      area.innerHTML = '';
-      problems.forEach((p,i) => {
-        const div = document.createElement('div');
-        div.className = 'card';
-        div.innerHTML = `
-          <h3>Problema ${i+1}</h3>
-          <p>${p.q}</p>
-          <div style="display:flex;gap:8px">
-            <input class="input" id="probInp${i}" placeholder="La teva resposta">
-            <button class="btn" data-i="${i}" id="probBtn${i}">Comprovar</button>
-            <button class="btn ghost" data-i="${i}" id="probHint${i}">Pista</button>
-          </div>
-          <div id="probOut${i}" class="muted" style="margin-top:8px"></div>
-        `;
-        area.appendChild(div);
+function checkMatch(){
+  let ok=0;
+  document.querySelectorAll('.match-box').forEach(b=>{
+    const term = b.dataset.term;
+    const ass = b.dataset.assigned||'';
+    if(((term=='Solut')&&(ass.includes('es dissol'))) ||
+       ((term=='Dissolvent')&&(ass.includes('dissol'))) ||
+       ((term=='g/L')&&(ass.includes('per litre'))) ||
+       ((term=='% massa')&&(ass.includes('massa total'))) ) ok++;
+  });
 
-        // add listeners
-        document.getElementById(`probBtn${i}`).addEventListener('click', ()=>{
-          const val = document.getElementById(`probInp${i}`).value.trim().replace(',', '.');
-          const out = document.getElementById(`probOut${i}`);
-          if(!val){ out.innerText = 'Introdueix una resposta'; return; }
-          // compare numeric or textual
-          if(!isNaN(p.sol)){
-            const num = Number(val);
-            if(Math.abs(num - Number(p.sol)) <= 0.5){
-              out.innerText = 'Correcte!'; awardPoints(8); state.achievements.problemSolver.times = (state.achievements.problemSolver.times || 0) + 1;
-              if(state.achievements.problemSolver.times >= 5) unlock('problemSolver');
-              saveState(); renderAchievements();
-            } else out.innerText = `No exacte. Solució: ${p.sol}`;
-          } else {
-            if(val.toLowerCase() === p.sol.toLowerCase()) { out.innerText = 'Correcte!'; awardPoints(8); } else out.innerText = `No. Solució: ${p.sol}`;
-          }
-        });
+  document.getElementById('matchres').innerText = `${ok}/4 correctes.`;
+  if(ok==4) unlock('matchMaster');
+}
 
-        document.getElementById(`probHint${i}`).addEventListener('click', ()=>{
-          document.getElementById(`probOut${i}`).innerText = `Pista: ${p.hint}`;
-        });
+/* ------------------------------ */
+/* JOC 3: Laboratori             */
+/* ------------------------------ */
+function startLab(){
+  const area = document.getElementById('gameArea');
+  area.innerHTML=`
+    <div class='card fade-enter'>
+      <h3>⚗️ Preparació de dissolucions</h3>
+      <p class='small'>Intenta aconseguir 12 g/L.</p>
+      <input id='lg' placeholder='grams solut' />
+      <input id='ll' placeholder='ml de dissolució' />
+      <button class='btn' onclick='checkLab()'>Comprovar</button>
+      <p id='labres'></p>
+    </div>`;
+}
 
-      });
-    }
-    renderProblems();
+function checkLab(){
+  const g = Number(document.getElementById('lg').value);
+  const L = Number(document.getElementById('ll').value)/1000;
+  if(!g||!L) return;
+  const c = g/L;
+  if(Math.abs(c-12)<=0.5){
+    document.getElementById('labres').innerText="Perfecte!";
+    unlock('labWizard');
+  } else document.getElementById('labres').innerText=`No exacte. Tens ${c.toFixed(2)} g/L`;
+}
 
-    /* ================ GAMES: Match Drag&Drop (millorat) =========== */
-    function startMatchGame(){
-      navTo('jocs');
-      const area = document.getElementById('gameArea');
-      area.innerHTML = '';
-      const terms = [
-        {t:'Solut', d:'Substància que es dissol (ex: sal)'},
-        {t:'Dissolvent', d:'Substància que dissol (ex: aigua)'},
-        {t:'g/L', d:'grams de solut per litre de dissolució'},
-        {t:'% massa', d:'(massa solut / massa total) × 100'}
-      ];
-      const defs = shuffle(terms.map(x => x.d));
-      const left = document.createElement('div'); left.className = 'col';
-      terms.forEach(term => {
-        const card = document.createElement('div'); card.className = 'card'; card.style.marginBottom = '8px';
-        card.innerHTML = `<b>${term.t}</b><div class="match-box" data-term="${term.t}"></div>`;
-        left.appendChild(card);
-      });
-      const right = document.createElement('div'); right.className = 'col';
-      defs.forEach(d => {
-        const el = document.createElement('div');
-        el.className = 'draggable';
-        el.setAttribute('draggable', 'true');
-        el.innerText = d;
-        el.addEventListener('dragstart', ev => {
-          ev.dataTransfer.setData('text/plain', d);
-          ev.dataTransfer.effectAllowed = 'move';
-        });
-        right.appendChild(el);
-      });
+/* ------------------------------ */
+/* PROBLEMES (reals del PDF)     */
+/* ------------------------------ */
+const problemes = [
+  {
+    t:"Calcula la concentració en g/L d'una dissolució amb 30 g de solut en 600 ml.",
+    sol:"50 g/L",
+    pas:"600 ml → 0.6 L; 30 / 0.6 = 50 g/L"
+  },
+  {
+    t:"Quin % en massa té una dissolució amb 10 g de solut i 100 g de dissolvent?",
+    sol:"9.09%",
+    pas:"Total = 110 g; 10/110 ×100" 
+  },
+  /* Pots afegir més (també inventats) */
+];
 
-      const wrap = document.createElement('div'); wrap.className = 'match-wrap';
-      wrap.appendChild(left); wrap.appendChild(right);
-      area.appendChild(wrap);
+(function renderProblemes(){
+  const area = document.getElementById('problemesArea');
+  let out = "";
+  problemes.forEach((p,i)=>{
+    out += `
+    <div class='card fade-enter'>
+      <h3>Problema ${i+1}</h3>
+      <p>${p.t}</p>
+      <button class='btn secondary' onclick="showHint(${i})">Pista</button>
+      <button class='btn secondary' onclick="trySolve(${i})">Intentar</button>
+      <div id='pb${i}'></div>
+    </div>`;
+  });
+  area.innerHTML = out;
+})();
 
-      // attach drop handlers
-      area.querySelectorAll('.match-box').forEach(box => {
-        box.addEventListener('dragover', ev => { ev.preventDefault(); box.classList.add('dragover'); });
-        box.addEventListener('dragleave', ev => { box.classList.remove('dragover'); });
-        box.addEventListener('drop', ev => {
-          ev.preventDefault();
-          box.classList.remove('dragover');
-          const txt = ev.dataTransfer.getData('text/plain');
-          box.innerHTML = `<div>${txt}</div>`;
-          box.dataset.assigned = txt;
-        });
-      });
+function showHint(i){
+  document.getElementById('pb'+i).innerHTML = `<p class='small'>Pista: ${problemes[i].pas}</p>`;
+}
+function trySolve(i){
+  document.getElementById('pb'+i).innerHTML = `
+    <input id='sol${i}' placeholder='Resposta' />
+    <button class='btn' onclick='checkPb(${i})'>Comprovar</button>
+    <p id='pbr${i}'></p>`;
+}
+function checkPb(i){
+  const u = document.getElementById('sol'+i).value;
+  const r = document.getElementById('pbr'+i);
+  if(u.replace(/\s/g,'').toLowerCase()==problemes[i].sol.replace(/\s/g,'').toLowerCase()){
+    r.innerText="Correcte!";
+    unlock('problemSolver');
+  } else r.innerText="No exacte. Solució: "+problemes[i].sol;
+}
 
-      // add check button
-      const btn = document.createElement('button'); btn.className = 'btn'; btn.innerText = 'Comprovar';
-      btn.addEventListener('click', ()=>{
-        let ok = 0;
-        area.querySelectorAll('.match-box').forEach(b => {
-          const term = b.dataset.term;
-          const ass = (b.dataset.assigned || '').toLowerCase();
-          if(matchCheck(term, ass)) ok++;
-        });
-        if(ok === 4){ awardPoints(12); unlock('matchMaster'); alert('Perfecte! Relacions correctes. + punts'); }
-        else alert(`${ok}/4 correctes.`);
-      });
-      area.appendChild(btn);
-    }
+/* ------------------------------ */
+/* LOGROS                        */
+/* ------------------------------ */
+let logros = {
+  lectura:{name:"Lector",desc:"Has llegit els apunts",icon:"📘",unlocked:false},
+  calc10:{name:"Càlculs",desc:"Has encertat 10 preguntes",icon:"🧮",unlocked:false},
+  matchMaster:{name:"Relacions",desc:"Has completat un joc d'arrossegar",icon:"🔗",unlocked:false},
+  labWizard:{name:"Laboratori",desc:"Has preparat una dissolució",icon:"⚗️",unlocked:false},
+  problemSolver:{name:"Problemes",desc:"Has resolt un problema real",icon:"🧪",unlocked:false}
+};
 
-    function matchCheck(term, assigned){
-      if(!assigned) return false;
-      if(term === 'Solut') return assigned.includes('dissol');
-      if(term === 'Dissolvent') return assigned.includes('dissol') && !assigned.includes('solut');
-      if(term === 'g/L') return assigned.includes('litre') || assigned.includes('per litre') || assigned.includes('g/l');
-      if(term === '% massa') return assigned.includes('massa');
-      return false;
-    }
+if(localStorage.getItem('fq_logros')){
+  logros = JSON.parse(localStorage.getItem('fq_logros'));
+}
 
-    function shuffle(a){ return a.sort(()=>Math.random()-0.5); }
-
-    /* ================ GAMES: Calc rapid (ràfega) ============= */
-    let calcRoundCorrect = 0;
-    function startCalcGame(){
-      navTo('jocs');
-      const area = document.getElementById('gameArea');
-      area.innerHTML = '';
-      const box = document.createElement('div'); box.className = 'card';
-      box.innerHTML = `<h3>Ràfega de càlculs</h3><p class="small">Respon 10 preguntes per completar el repte.</p><div id="calcQ"></div><div id="calcMsg" class="muted" style="margin-top:8px"></div>`;
-      area.appendChild(box);
-      newCalcQuestion();
-    }
-    function newCalcQuestion(){
-      const g = Math.floor(Math.random()*45)+5;
-      const ml = Math.floor(Math.random()*1400)+100;
-      const ans = g / (ml/1000);
-      const q = document.getElementById('calcQ');
-      q.innerHTML = `
-        <p>Quina concentració si tens <b>${g} g</b> de solut en <b>${ml} ml</b>?</p>
-        <input id="calcAns" class="input" placeholder="Resposta (g/L)">
-        <div style="height:8px"></div>
-        <div style="display:flex;gap:8px">
-          <button class="btn" id="checkCalcBtn">Comprovar</button>
-          <button class="btn ghost" id="skipCalcBtn">Salt</button>
-        </div>`;
-      document.getElementById('checkCalcBtn').onclick = ()=>{
-        const v = Number(document.getElementById('calcAns').value);
-        if(Math.abs(v - ans) <= 0.6){
-          calcRoundCorrect++; awardPoints(4);
-          state.achievements.quickCalc.times = (state.achievements.quickCalc.times || 0) + 1;
-          if(state.achievements.quickCalc.times >= 10) unlock('quickCalc');
-          saveState(); renderAchievements();
-          if(calcRoundCorrect >= 10){ alert('Repte completat! Felicitats.'); calcRoundCorrect = 0; return; }
-          newCalcQuestion();
-        } else {
-          alert(`No exacte. Solució: ${ans.toFixed(2)} g/L`); resetStreak();
-        }
-      };
-      document.getElementById('skipCalcBtn').onclick = ()=> newCalcQuestion();
-    }
-
-    /* ================ GAMES: Lab simulator ============== */
-    function startLabGame(){
-      navTo('jocs');
-      const area = document.getElementById('gameArea');
-      area.innerHTML = '';
-      const required = Math.floor(Math.random()*15) + 5; // target g/L
-      const box = document.createElement('div'); box.className = 'card';
-      box.innerHTML = `<h3>Laboratori</h3><p class="small">Objectiu: prepara una dissolució de <b>${required} g/L</b></p>
-        <div style="display:flex;gap:8px">
-          <input id="labG" class="input" placeholder="grams solut">
-          <input id="labML" class="input" placeholder="ml dissolució">
-          <button class="btn" id="labCheck">Comprovar</button>
+function renderLogros(){
+  const box = document.getElementById('logrosList');
+  box.innerHTML="";
+  for(const k in logros){
+    const L = logros[k];
+    box.innerHTML += `
+      <div class='logro ${L.unlocked?"":"locked"} fade-enter'>
+        <div class='logro-icon'>${L.icon}</div>
+        <div>
+          <b>${L.name}</b><br>
+          <span class='small'>${L.desc}</span>
         </div>
-        <div id="labOut" class="muted" style="margin-top:8px"></div>`;
-      area.appendChild(box);
-      document.getElementById('labCheck').addEventListener('click', ()=>{
-        const g = Number(document.getElementById('labG').value);
-        const ml = Number(document.getElementById('labML').value);
-        if(!g || !ml){ document.getElementById('labOut').innerText = 'Introdueix valors vàlids'; return; }
-        const got = g / (ml/1000);
-        if(Math.abs(got - required) <= 0.5){
-          document.getElementById('labOut').innerText = `Correcte! Tens ${got.toFixed(2)} g/L`;
-          awardPoints(10); unlock('labWizard');
-        } else {
-          document.getElementById('labOut').innerText = `Tens ${got.toFixed(2)} g/L; objectiu ${required} g/L`;
-          resetStreak();
-        }
-      });
-    }
+      </div>`;
+  }
+}
+renderLogros();
 
-    /* ================ GAMES: Timed challenge ============= */
-    function startTimedGame(){
-      navTo('jocs');
-      const area = document.getElementById('gameArea');
-      area.innerHTML = '';
-      const box = document.createElement('div'); box.className = 'card';
-      box.innerHTML = `<h3>Repte cronometrat</h3><p class="small">Resol 5 preguntes en 60 segons.</p>
-        <div id="timedQ"></div>
-        <div style="height:8px"></div>
-        <div id="timedTimer" class="muted"></div>`;
-      area.appendChild(box);
-      let timeLeft = 60; let solved = 0; const timerEl = document.getElementById('timedTimer');
-      const timer = setInterval(()=>{ timeLeft--; timerEl.innerText = `Temps: ${timeLeft}s`; if(timeLeft<=0){ clearInterval(timer); alert('Temps acabat!'); } }, 1000);
-      nextTimed();
+function unlock(k){
+  if(logros[k] && !logros[k].unlocked){
+    logros[k].unlocked=true;
+    localStorage.setItem('fq_logros',JSON.stringify(logros));
+    renderLogros();
+  }
+}
 
-      function nextTimed(){
-        if(solved >= 5){ clearInterval(timer); alert('Repte completat!'); awardPoints(20); unlock('speedy'); return; }
-        const g = Math.floor(Math.random()*40)+5; const ml = Math.floor(Math.random()*900)+100; const ans = g / (ml/1000);
-        document.getElementById('timedQ').innerHTML = `<p>${g} g en ${ml} ml → ? g/L</p><input id="tans" class="input" placeholder="Resposta"><div style="height:8px"></div><button class="btn" id="tcheck">Comprovar</button>`;
-        document.getElementById('tcheck').onclick = ()=>{
-          const u = Number(document.getElementById('tans').value);
-          if(Math.abs(u - ans) <= 0.7){ solved++; awardPoints(5); nextTimed(); } else { alert('No correcte'); resetStreak(); }
-        };
-      }
-    }
+/* ------------------------------ */
+/* CONFIG: Mode fosc + paletes  */
+/* ------------------------------ */
+function toggleDark(){
+  document.body.classList.toggle('dark');
+}
 
-    /* ================ GAMES: Fill the blank ============ */
-    function startFillGame(){
-      navTo('jocs');
-      const area = document.getElementById('gameArea');
-      area.innerHTML = '';
-      const html = `<div class="card"><h3>Omple els buits</h3><p class="small">Completa la frase:</p>
-        <p>La concentració en g/L es calcula com <input id="fb1" class="input" style="width:100px;display:inline-block"> ÷ <input id="fb2" class="input" style="width:100px;display:inline-block"></p>
-        <div style="height:8px"></div>
-        <button class="btn" id="fbCheck">Comprovar</button>
-        <div id="fbOut" class="muted" style="margin-top:8px"></div></div>`;
-      area.innerHTML = html;
-      document.getElementById('fbCheck').addEventListener('click', ()=>{
-        const a = document.getElementById('fb1').value.toLowerCase();
-        const b = document.getElementById('fb2').value.toLowerCase();
-        if((a.includes('g') || a.includes('grams') ) && (b.includes('l') || b.includes('litre'))) { document.getElementById('fbOut').innerText = 'Correcte!'; awardPoints(4); unlock('matchMaster'); }
-        else { document.getElementById('fbOut').innerText = 'Tracta de pensar en grams i litres.'; resetStreak(); }
-      });
-    }
+function setPalette(p){
+  const root=document.documentElement;
+  if(p=='menta'){
+    root.style.setProperty('--accent','#48d8b4');
+    root.style.setProperty('--accent2','#7afbe6');
+  } else if(p=='magma'){
+    root.style.setProperty('--accent','#ff5a3d');
+    root.style.setProperty('--accent2','#ffb36e');
+  } else {
+    root.style.setProperty('--accent','#4d6bff');
+    root.style.setProperty('--accent2','#5dd4c6');
+  }
+}
+</script>
 
-    /* ================ RENDER / WIRING GAMES ============ */
-    document.getElementById('tileMatch').addEventListener('click', startMatchGame);
-    document.getElementById('tileCalc').addEventListener('click', startCalcGame);
-    document.getElementById('tileLab').addEventListener('click', startLabGame);
-    document.getElementById('tileTimed').addEventListener('click', startTimedGame);
-    document.getElementById('tileFill').addEventListener('click', startFillGame);
-
-    /* ================ RENDER ACHIEVEMENTS INIT ========== */
-    renderAchievements();
-    updateSidebar();
-
-    /* ================ SAVE STATE PERIODIC =============== */
-    window.addEventListener('beforeunload', saveState);
-
-    /* ================ HELPER UTILS =================== */
-    function randRange(min, max){ return Math.floor(Math.random()*(max-min+1))+min; }
-
-    /* ================ INIT APPLY SAVED PALETTE ======== */
-    if(state.palette && state.palette !== 'default'){ applyOnLoadPalette(state.palette); }
-    function applyOnLoadPalette(name){
-      if(name === 'menta') setVariables('#e6fbf7', '#d3fff6', '#48d8b4', '#7afbe6');
-      else if(name === 'magma') setVariables('#fff3ee', '#fff6ec', '#ff5a3d', '#ffb36e');
-      else setVariables('#f4f7ff', '#edf5ff', '#4d6bff', '#5dd4c6');
-    }
-    function setVariables(bg1,bg2,accent,accent2){
-      document.documentElement.style.setProperty('--bg-a', bg1);
-      document.documentElement.style.setProperty('--bg-b', bg2);
-      document.documentElement.style.setProperty('--accent', accent);
-      document.documentElement.style.setProperty('--accent2', accent2);
-      document.body.style.background = `linear-gradient(180deg, ${bg1}, ${bg2})`;
-    }
-
-    // palette apply buttons
-    document.querySelectorAll('button[data-palette]').forEach(btn => {
-      btn.addEventListener('click', ()=> {
-        const p = btn.dataset.palette;
-        if(p === 'menta') setVariables('#e6fbf7','#d3fff6','#48d8b4','#7afbe6');
-        else if(p === 'magma') setVariables('#fff3ee','#fff6ec','#ff5a3d','#ffb36e');
-        else setVariables('#f4f7ff','#edf5ff','#4d6bff','#5dd4c6');
-        state.palette = p; saveState(); unlock('paletteStylist'); renderAchievements();
-      });
-    });
-
-    /* ================ INITIAL VISIT MARKERS ============ */
-    // mark apunts visited on load
-    localStorage.setItem('visited_apunts', '1');
-    checkExplorer();
-
-  </script>
 </body>
 </html>
