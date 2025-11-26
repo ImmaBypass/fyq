@@ -1,0 +1,516 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>FisQuim Quest — Estudia jugando</title>
+<style>
+  :root{
+    --bg:#F3F7FF; --card:#fff; --accent:#556BFF; --accent2:#50C2C9;
+    --muted:#64748b; --text:#1F2937; --pill:#F3D7FF;
+    --radius:12px;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0; font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial;
+    background:linear-gradient(180deg,var(--bg),#edf5ff 100%); color:var(--text);
+    -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+  }
+
+  header{display:flex;align-items:center;gap:1rem;padding:1rem 1.25rem;background:transparent}
+  .logo{
+    display:flex;align-items:center;gap:.75rem;
+  }
+  .logo .mark{width:48px;height:48px;border-radius:10px;background:
+    linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;color:white;font-weight:700;box-shadow:0 6px 20px rgba(85,107,255,.18)}
+  h1{font-size:18px;margin:0}
+  nav{display:flex;gap:.5rem;margin-left:auto}
+  nav button{background:transparent;border:1px solid transparent;padding:.5rem .8rem;border-radius:10px;cursor:pointer}
+  nav button.active,nav button:hover{background:var(--card);box-shadow:0 4px 12px rgba(16,24,40,.06)}
+
+  .container{max-width:1100px;margin:1rem auto;padding:1rem}
+  .grid{display:grid;grid-template-columns:1fr 380px;gap:1rem}
+  .main{min-height:60vh}
+  .card{background:var(--card);padding:1rem;border-radius:var(--radius);box-shadow:0 6px 20px rgba(16,24,40,.06)}
+  .section-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem}
+  .small{font-size:13px;color:var(--muted)}
+
+  /* Apuntes style */
+  .apunte{margin-bottom:1rem;padding:.9rem;border-radius:12px;background:linear-gradient(180deg,rgba(85,107,255,.03),transparent);border:1px solid rgba(85,107,255,.06)}
+  .formula{background:#f6f9ff;padding:.6rem;border-radius:8px;font-weight:600}
+
+  /* Games */
+  .game-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:0.8rem}
+  .game-tile{padding:1rem;border-radius:10px;text-align:center;cursor:pointer;transition:transform .18s}
+  .game-tile:hover{transform:translateY(-6px)}
+  .btn{background:var(--accent);color:white;border:none;padding:.6rem .9rem;border-radius:10px;cursor:pointer;font-weight:600}
+  .btn.secondary{background:transparent;color:var(--accent);border:1px solid rgba(85,107,255,.12)}
+
+  /* Memory */
+  .board{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+  .card-tile{background:linear-gradient(180deg,#fff,#f8fbff);border-radius:10px;padding:8px;display:flex;align-items:center;justify-content:center;font-weight:700;cursor:pointer;min-height:70px;box-shadow:0 6px 16px rgba(20,30,60,.05);transition:transform .18s}
+  .card-tile.revealed{background:linear-gradient(180deg,var(--accent),var(--accent2));color:white;transform:scale(1.03)}
+  .card-tile.matched{opacity:.6;transform:scale(.98);cursor:default}
+
+  /* Ranking */
+  .badge{display:inline-block;padding:.35rem .55rem;border-radius:999px;background:var(--pill);font-weight:700;color:var(--accent)}
+
+  /* responsive */
+  @media (max-width:920px){ .grid{grid-template-columns:1fr} .game-grid{grid-template-columns:1fr} .board{grid-template-columns:repeat(3,1fr)} nav{display:none} }
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">
+    <div class="mark">FQ</div>
+    <div><h1>FisQuim Quest</h1><div class="small">Concentraciones & disoluciones — aprende jugando</div></div>
+  </div>
+  <nav id="topnav" aria-hidden="false">
+    <button id="btn-apuntes" class="active" onclick="navTo('apuntes')">📘 Apuntes</button>
+    <button id="btn-juegos" onclick="navTo('juegos')">🎮 Minijuegos</button>
+    <button id="btn-ranking" onclick="navTo('ranking')">🏆 Ranking</button>
+    <button id="btn-config" onclick="navTo('config')">⚙️ Config</button>
+  </nav>
+</header>
+
+<main class="container">
+  <div class="grid">
+    <div class="main">
+      <!-- APUNTES -->
+      <section id="apuntes" class="card">
+        <div class="section-title">
+          <h2>Apuntes rápidos — Concentraciones</h2>
+          <div class="small">Interactividad dentro para practicar</div>
+        </div>
+
+        <div class="apunte">
+          <h3>¿Qué es una disolución?</h3>
+          <p>Una disolución está formada por un <b>soluto</b> (lo que se disuelve) y un <b>dissolvent</b> (lo que disuelve). En la mayoría de los casos el disolvent és <i>aigua</i>.</p>
+        </div>
+
+        <div class="apunte">
+          <h3>Concentración en g/L</h3>
+          <div class="formula">g/L = gramos de soluto ÷ litros de disolución</div>
+          <p class="small">Ejemplo interactivo:</p>
+          <div style="display:flex;gap:.5rem;align-items:center">
+            <input id="inp-g" type="number" placeholder="g soluto" style="padding:.5rem;border-radius:8px;border:1px solid #e6eefc" />
+            <input id="inp-ml" type="number" placeholder="ml total (p.ej. 600)" style="padding:.5rem;border-radius:8px;border:1px solid #e6eefc" />
+            <button class="btn" onclick="calcGL()">Calcular</button>
+          </div>
+          <p id="res-gl" style="margin-top:.6rem;font-weight:700"></p>
+        </div>
+
+        <div class="apunte">
+          <h3>Porcentaje en masa</h3>
+          <div class="formula">% = (masa soluto ÷ masa total) × 100</div>
+          <p class="small">Prueba rápida:</p>
+          <div style="display:flex;gap:.5rem;align-items:center">
+            <input id="inp-sol" type="number" placeholder="g soluto" style="padding:.5rem;border-radius:8px;border:1px solid #efeefe" />
+            <input id="inp-ds" type="number" placeholder="g disolvent" style="padding:.5rem;border-radius:8px;border:1px solid #efeefe" />
+            <button class="btn" onclick="calcPct()">Comprobar</button>
+          </div>
+          <p id="res-pct" style="margin-top:.6rem;font-weight:700"></p>
+        </div>
+
+        <div class="apunte">
+          <h3>Mini-ejercicio divertido 🎲</h3>
+          <p>Si preparas 280 ml de colonia que es 80% vol alcohol, ¿cuánto alcohol necesitas?</p>
+          <div class="small">Rellena tu respuesta (en ml)</div>
+          <div style="display:flex;gap:.5rem;margin-top:.4rem">
+            <input id="colonia" type="number" placeholder="ml alcohol" style="padding:.5rem;border-radius:8px;border:1px solid #f0f0f0" />
+            <button class="btn secondary" onclick="checkColonia()">Comprobar</button>
+          </div>
+          <p id="res-col" style="margin-top:.45rem;font-weight:700"></p>
+        </div>
+      </section>
+
+      <!-- JUEGOS -->
+      <section id="juegos" class="card" style="display:none">
+        <div class="section-title"><h2>Minijuegos</h2><div class="small">Gana puntos y desbloquea logros</div></div>
+
+        <div class="game-grid">
+          <div class="game-tile card" onclick="startMemory()">
+            <h3>Memory — pares</h3>
+            <p class="small">Encuentra parejas en el menor tiempo</p>
+          </div>
+          <div class="game-tile card" onclick="startTypeQuiz()">
+            <h3>Respuesta escrita</h3>
+            <p class="small">Calcula concentraciones y escribe la respuesta</p>
+          </div>
+          <div class="game-tile card" onclick="startMatch()">
+            <h3>Arrastra & suelta</h3>
+            <p class="small">Relaciona términos y definiciones</p>
+          </div>
+        </div>
+
+        <div id="gameArea" style="margin-top:1rem"></div>
+      </section>
+
+      <!-- RANKING -->
+      <section id="ranking" class="card" style="display:none">
+        <div class="section-title">
+          <h2>Ranking & Logros</h2>
+          <div class="small">Tu progreso se guarda localmente</div>
+        </div>
+
+        <div class="small">Jugador: <span id="playerNameDisplay"></span></div>
+        <div style="display:flex;gap:.5rem;margin-top:.5rem">
+          <button class="btn" onclick="saveScore()">Guardar puntuación actual</button>
+          <button class="btn secondary" onclick="exportScores()">Exportar JSON</button>
+          <button class="btn secondary" onclick="importScoresPrompt()">Importar JSON</button>
+        </div>
+
+        <div style="margin-top:1rem" class="card">
+          <h4>Top local</h4>
+          <ol id="leaderboard"></ol>
+        </div>
+
+        <div style="margin-top:1rem" class="card">
+          <h4>Logros</h4>
+          <div id="badges"></div>
+        </div>
+      </section>
+
+      <!-- CONFIG -->
+      <section id="config" class="card" style="display:none">
+        <div class="section-title"><h2>Configuración</h2></div>
+        <p class="small">Pon tu nombre (se usa para ranking local)</p>
+        <div style="display:flex;gap:.5rem;align-items:center">
+          <input id="playerName" placeholder="Tu nombre" style="padding:.6rem;border-radius:8px;border:1px solid #e3eefc" />
+          <button class="btn" onclick="saveName()">Guardar</button>
+        </div>
+        <div style="margin-top:1rem">
+          <button class="btn secondary" onclick="resetAll()">Resetear progreso</button>
+        </div>
+      </section>
+    </div>
+
+    <!-- Lateral: info rápida y puntos -->
+    <aside>
+      <div class="card">
+        <h3>Estado</h3>
+        <p>Puntos: <span id="score">0</span></p>
+        <p>Aciertos seguidos: <span id="streak">0</span></p>
+        <p class="small">Consejo: juega el memory para practicar reconocimiento rápido, y usa el tipo-respuesta para calcular.</p>
+      </div>
+
+      <div class="card" style="margin-top:1rem">
+        <h4>Consejos rápidos</h4>
+        <ul style="padding-left:1rem;color:var(--muted)">
+          <li>Convierta ml → L antes de calcular g/L</li>
+          <li>En % en masa, suma soluto + disolvent</li>
+          <li>Piensa en <b>soluto</b> = "lo que se añade"</li>
+        </ul>
+      </div>
+    </aside>
+
+  </div>
+</main>
+
+<script>
+/* ---------- Estado global ---------- */
+const state = {
+  score: Number(localStorage.getItem('fq_score')||0),
+  streak: 0,
+  name: localStorage.getItem('fq_name') || 'Jugador',
+  topScores: JSON.parse(localStorage.getItem('fq_leader')||'[]'),
+  badges: JSON.parse(localStorage.getItem('fq_badges')||'{}'),
+};
+document.getElementById('score').textContent = state.score;
+document.getElementById('streak').textContent = state.streak;
+document.getElementById('playerNameDisplay').textContent = state.name;
+document.getElementById('playerName').value = state.name;
+
+/* ---------- NAV ---------- */
+function navTo(id){
+  ['apuntes','juegos','ranking','config'].forEach(s => {
+    const el = document.getElementById(s);
+    if(el) el.style.display = (s===id? 'block':'none');
+    document.getElementById('btn-'+s).classList.toggle('active', s===id);
+  });
+  // update ranking view if requested
+  if(id==='ranking') renderLeaderboard(), renderBadges();
+}
+
+/* ---------- APUNTES: calculadoras ---------- */
+function calcGL(){
+  const g = Number(document.getElementById('inp-g').value);
+  const ml = Number(document.getElementById('inp-ml').value);
+  if(!g || !ml){ document.getElementById('res-gl').textContent = 'Introduce g y ml'; return; }
+  const L = ml/1000;
+  const res = g / L;
+  document.getElementById('res-gl').textContent = `${res.toFixed(2)} g/L`;
+}
+function calcPct(){
+  const s = Number(document.getElementById('inp-sol').value);
+  const d = Number(document.getElementById('inp-ds').value);
+  if(isNaN(s) || isNaN(d)){ document.getElementById('res-pct').textContent='Rellena ambos campos'; return; }
+  const total = s + d;
+  const pct = (s/total)*100;
+  document.getElementById('res-pct').textContent = `${pct.toFixed(2)} % en masa`;
+}
+function checkColonia(){
+  const v = Number(document.getElementById('colonia').value);
+  const expected = 280 * 0.80;
+  const out = document.getElementById('res-col');
+  if(Math.abs(v-expected) <= 1){ out.textContent = `¡Correcto! necesitas ${expected} ml (±1 ml).`; award(5) }
+  else out.textContent = `No exactamente. Se necesitan ${expected} ml.`;
+}
+
+/* ---------- BADGES & SCORE ---------- */
+function award(points){
+  state.score += points;
+  state.streak += 1;
+  document.getElementById('score').textContent = state.score;
+  document.getElementById('streak').textContent = state.streak;
+  localStorage.setItem('fq_score', state.score);
+  checkBadges();
+}
+function failStreak(){
+  state.streak = 0;
+  document.getElementById('streak').textContent = state.streak;
+}
+function checkBadges(){
+  const b = state.badges;
+  if(!b['primeros10'] && state.score >= 10){ b['primeros10'] = {name:'Primeros 10',desc:'Gana 10 puntos'}; }
+  if(!b['cazador'] && state.score >= 50){ b['cazador'] = {name:'Cazador de pares',desc:'50 puntos acumulados'}; }
+  if(!b['racha3'] && state.streak >= 3){ b['racha3'] = {name:'Racha 3',desc:'3 aciertos seguidos'}; }
+  localStorage.setItem('fq_badges', JSON.stringify(b));
+  state.badges = b;
+}
+function renderBadges(){
+  const box = document.getElementById('badges');
+  box.innerHTML = '';
+  const all = state.badges;
+  if(!Object.keys(all).length){ box.innerHTML = '<div class="small">Sin logros todavía. Juega y consigue medallas 🎖️</div>'; return; }
+  for(const k in all){
+    const item = all[k];
+    const d = document.createElement('div');
+    d.style.padding='8px'; d.style.marginBottom='6px';
+    d.innerHTML = `<span class="badge">${item.name}</span> <div class="small" style="display:inline-block;margin-left:8px">${item.desc}</div>`;
+    box.appendChild(d);
+  }
+}
+
+/* ---------- LEADERBOARD ---------- */
+function saveScore(){
+  const name = state.name || 'Jugador';
+  state.topScores.push({name,score:state.score,ts:Date.now()});
+  state.topScores.sort((a,b)=>b.score-a.score);
+  state.topScores = state.topScores.slice(0,20);
+  localStorage.setItem('fq_leader', JSON.stringify(state.topScores));
+  renderLeaderboard();
+  alert('Puntuación guardada localmente.');
+}
+function renderLeaderboard(){
+  const list = document.getElementById('leaderboard');
+  list.innerHTML = '';
+  (state.topScores||[]).forEach((s,i)=>{
+    const li = document.createElement('li');
+    li.textContent = `${s.name} — ${s.score} pts`;
+    list.appendChild(li);
+  });
+}
+function exportScores(){
+  const data = {scores: state.topScores, badges: state.badges};
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href=url; a.download='fisquim_ranking.json'; a.click();
+  URL.revokeObjectURL(url);
+}
+function importScoresPrompt(){
+  const input = document.createElement('input'); input.type='file'; input.accept='application/json';
+  input.onchange = e => {
+    const file = e.target.files[0];
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      try{
+        const parsed = JSON.parse(ev.target.result);
+        if(parsed.scores) state.topScores = parsed.scores;
+        if(parsed.badges) state.badges = parsed.badges;
+        localStorage.setItem('fq_leader', JSON.stringify(state.topScores));
+        localStorage.setItem('fq_badges', JSON.stringify(state.badges));
+        renderLeaderboard(); renderBadges();
+        alert('Importado con éxito.');
+      }catch(err){ alert('Archivo no válido'); }
+    };
+    reader.readAsText(file);
+  };
+  input.click();
+}
+
+/* ---------- CONFIG ---------- */
+function saveName(){
+  const v = document.getElementById('playerName').value.trim() || 'Jugador';
+  state.name = v; localStorage.setItem('fq_name', v);
+  document.getElementById('playerNameDisplay').textContent = v;
+  alert('Nombre guardado: ' + v);
+}
+function resetAll(){
+  if(!confirm('¿Resetear puntuaciones, logros y nombre?')) return;
+  localStorage.clear();
+  Object.assign(state, {score:0,streak:0,name:'Jugador',topScores:[],badges:{}});
+  document.getElementById('score').textContent = 0;
+  document.getElementById('streak').textContent = 0;
+  document.getElementById('playerNameDisplay').textContent = 'Jugador';
+  document.getElementById('playerName').value = 'Jugador';
+  renderLeaderboard(); renderBadges();
+  alert('Reset completado');
+}
+
+/* ---------- MINIJUEGOS ---------- */
+
+/* 1) Memory (pares) */
+let memory = {board:[],first:null,second:null,lock:false,matches:0,timer:null,startTS:0};
+function startMemory(){
+  navTo('juegos');
+  const area = document.getElementById('gameArea');
+  area.innerHTML = '<h3>Memory — encuentra pares</h3><div id="memBoard" style="margin-top:.6rem"></div><div style="margin-top:.6rem"><button class="btn" onclick="initMemory()">Reiniciar</button><span id="memInfo" style="margin-left:1rem" class="small"></span></div>';
+  initMemory();
+}
+function initMemory(){
+  const pairWords = ['Clorur','Aigua','Alcohol','Solut','Dissolvent','g/L','% massa','Vol%'];
+  // duplicate and shuffle
+  const arr = pairWords.concat(pairWords).sort(()=>Math.random()-0.5);
+  memory.board = arr.map((v,i)=>({id:i,val:v,revealed:false,matched:false}));
+  memory.first = memory.second = null; memory.lock=false; memory.matches=0;
+  memory.startTS = Date.now();
+  renderMemory();
+}
+function renderMemory(){
+  const board = document.getElementById('memBoard');
+  board.innerHTML = '';
+  const grid = document.createElement('div'); grid.className='board';
+  memory.board.forEach(tile=>{
+    const div = document.createElement('div');
+    div.className = 'card-tile' + (tile.revealed? ' revealed':'') + (tile.matched? ' matched':'');
+    div.textContent = tile.revealed || tile.matched ? tile.val : '❓';
+    div.onclick = ()=> flipTile(tile.id);
+    grid.appendChild(div);
+  });
+  board.appendChild(grid);
+}
+function flipTile(id){
+  if(memory.lock) return;
+  const tile = memory.board[id];
+  if(tile.matched || tile.revealed) return;
+  tile.revealed = true;
+  if(!memory.first) memory.first = tile;
+  else if(!memory.second) memory.second = tile;
+  renderMemory();
+  if(memory.first && memory.second){
+    if(memory.first.val === memory.second.val){
+      memory.first.matched = memory.second.matched = true;
+      memory.matches++;
+      award(10);
+      memory.first = memory.second = null;
+      if(memory.matches >= (memory.board.length/2)){
+        const elapsed = Math.round((Date.now()-memory.startTS)/1000);
+        const bonus = Math.max(0, 60 - elapsed); // faster -> more bonus
+        award(bonus);
+        alert(`¡Victoria! Tiempo: ${elapsed}s. Bonus: ${bonus} pts`);
+      }
+    } else {
+      memory.lock = true; failStreak();
+      setTimeout(()=>{
+        memory.first.revealed = memory.second.revealed = false;
+        memory.first = memory.second = null;
+        memory.lock = false;
+        renderMemory();
+      },900);
+    }
+  }
+}
+
+/* 2) Respuesta escrita (tipo mayormente cálculo) */
+function startTypeQuiz(){
+  navTo('juegos');
+  const area = document.getElementById('gameArea');
+  area.innerHTML = `<h3>Calcula la concentración (tipo escrito)</h3>
+    <div class="card" style="margin-top:.6rem">
+      <p>Pregunta: Se disuelven <b>30 g</b> de solut en <b>600 ml</b> de dissolució. ¿Cuál es la concentración en <b>g/L</b>?</p>
+      <input id="ans1" placeholder="Tu respuesta en g/L" style="padding:.6rem;border-radius:8px;border:1px solid #eee" />
+      <button class="btn" style="margin-left:.5rem" onclick="checkAns1()">Comprobar</button>
+      <p id="ans1res" style="margin-top:.5rem;font-weight:700"></p>
+    </div>
+  `;
+}
+function checkAns1(){
+  const v = Number(document.getElementById('ans1').value);
+  const correct = (30 / (600/1000)); // 50
+  if(Math.abs(v - correct) <= 0.5){
+    document.getElementById('ans1res').textContent = '¡Bien! +15 pts';
+    award(15);
+  } else {
+    document.getElementById('ans1res').textContent = `No es correcto. Respuesta: ${correct.toFixed(2)} g/L`;
+    failStreak();
+  }
+}
+
+/* 3) Match Drag & Drop */
+function startMatch(){
+  navTo('juegos');
+  const area = document.getElementById('gameArea');
+  const terms = [
+    {t:'Soluto', d:'Lo que se añade y se disuelve (p.ej. sal)'},
+    {t:'Disolvent', d:'Sustancia que disuelve, normalmente agua'},
+    {t:'g/L', d:'Gramos de soluto por litro de disolución'},
+    {t:'% en masa', d:'(masa soluto/masa total) × 100'}
+  ];
+  // shuffle definitions
+  const defs = terms.map(x=>x.d).sort(()=>Math.random()-0.5);
+  area.innerHTML = `<h3>Relaciona términos</h3><div style="display:flex;gap:1rem"><div style="flex:1" id="left"></div><div style="flex:1" id="right"></div></div>
+  <div style="margin-top:.6rem"><button class="btn" onclick="checkMatchAnswers()">Comprobar</button></div>`;
+  const left = document.getElementById('left'), right = document.getElementById('right');
+  terms.forEach((it,i)=>{
+    const el = document.createElement('div');
+    el.className='card'; el.style.marginBottom='8px';
+    el.innerHTML = `<div draggable="true" ondragstart="dragStart(event)" data-term="${it.t}" style="cursor:grab">${it.t}</div>
+    <div class="small" style="margin-top:6px">Suéltalo en:</div>
+    <div style="min-height:40px;border-radius:8px;padding:.4rem;margin-top:.4rem;border:1px dashed #e6eefc" data-target="${it.t}" ondragover="allowDrop(event)" ondrop="dropTo(event)"></div>`;
+    left.appendChild(el);
+  });
+  defs.forEach(d=>{
+    const el = document.createElement('div'); el.className='card'; el.style.marginBottom='8px';
+    el.innerHTML = `<div class="small">${d}</div>`;
+    right.appendChild(el);
+  });
+}
+function dragStart(ev){ ev.dataTransfer.setData('text/plain', ev.target.innerText); }
+function allowDrop(ev){ ev.preventDefault(); }
+function dropTo(ev){
+  ev.preventDefault();
+  const term = ev.dataTransfer.getData('text/plain');
+  // place term text into target box
+  if(!term) return;
+  const box = ev.currentTarget;
+  box.innerHTML = `<strong>${term}</strong>`;
+  box.dataset.assigned = term;
+}
+function checkMatchAnswers(){
+  const boxes = document.querySelectorAll('[data-target]');
+  let correct=0, total=boxes.length;
+  boxes.forEach(b=>{
+    const expected = b.dataset.target;
+    const assigned = b.dataset.assigned || '';
+    if(assigned === expected) correct++;
+  });
+  if(correct === total){
+    alert(`¡Perfecto! ${correct}/${total}. +20 pts`);
+    award(20);
+  } else {
+    alert(`${correct}/${total} correctos. Inténtalo otra vez.`);
+    failStreak();
+  }
+}
+
+/* ---------- Inicial ---------- */
+renderLeaderboard();
+renderBadges();
+navTo('apuntes');
+</script>
+
+</body>
+</html>
