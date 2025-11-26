@@ -1,522 +1,763 @@
-<!DOCTYPE html>
-<!-- FisQuim Quest — Versió actualitzada
-     - Català
-     - Millores: drag&drop arreglat, logros visibles, moltes més insígnies, easter eggs,
-       paletes que afecten fosc/clar, previsualització de paletes, noves minijocs,
-       animacions i experiència tipus videojoc.
-     Copia aquest fitxer sencer en index.html a GitHub Pages.
--->
+<!doctype html>
 <html lang="ca">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>FisQuim Quest — Aprèn jugant</title>
-<style>
-/* ---------------- PALETA I VARIABLES ---------------- */
-:root{
-  --bg1: #f4f7ff;             /* base background color */
-  --bg2: #edf5ff;             /* gradient end */
-  --card: #ffffff;
-  --text: #1d2333;
-  --muted: #6b7280;
-  --accent: #4d6bff;
-  --accent2: #5dd4c6;
-  --border: #e5e9f5;
-  --glass: rgba(255,255,255,0.6);
-  --radius: 14px;
-  --shadow: 0 6px 20px rgba(16,24,40,0.06);
-  --ui-glow: rgba(77,107,255,0.18);
-}
-/* dark base overrides (kept generic; palettes will override both) */
-body.dark{
-  --bg1: #0f1117;
-  --bg2: #12131a;
-  --card: #14151b;
-  --text: #e9ecf5;
-  --muted: #9aa1b8;
-  --border: #23262c;
-  --glass: rgba(255,255,255,0.02);
-  --shadow: 0 6px 24px rgba(0,0,0,0.6);
-  --ui-glow: rgba(125,145,255,0.12);
-}
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>FisQuim Quest — Aprèn jugant (Català)</title>
 
-/* palette presets (applied on top of root, work in both modes) */
-/* we will set gradients via JS by changing --accent & --accent2 and --bg-grad */
+  <style>
+    /* ----------------- VARIABLES BASE ----------------- */
+    :root{
+      --bg-a: #f4f7ff;
+      --bg-b: #edf5ff;
+      --card: #ffffff;
+      --text: #1d2333;
+      --muted: #6b7280;
+      --accent: #4d6bff;
+      --accent2: #5dd4c6;
+      --border: #e6eefc;
+      --radius: 12px;
+      --glass: rgba(255,255,255,0.6);
+      --shadow: 0 6px 22px rgba(16,24,40,0.06);
+    }
 
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%}
-body{
-  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-  background: linear-gradient(180deg,var(--bg1),var(--bg2));
-  color:var(--text);
-  transition: background .35s ease, color .25s ease;
-  -webkit-font-smoothing:antialiased;
-}
-header{position:sticky;top:0;z-index:40;padding:.9rem 1rem;background:linear-gradient(180deg,transparent,rgba(0,0,0,0.02));backdrop-filter: blur(4px)}
-.container{max-width:1100px;margin:1rem auto;padding:1rem}
-.logo-row{display:flex;align-items:center;gap:1rem}
-.logo-mark{width:58px;height:58px;border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:18px;background:linear-gradient(135deg,var(--accent),var(--accent2));box-shadow:0 8px 30px var(--ui-glow);cursor:pointer;transition:transform .2s ease}
-.logo-mark:hover{transform:translateY(-4px) scale(1.02)}
-.title-small{font-size:13px;color:var(--muted)}
-nav{display:flex;gap:.45rem;margin-left:auto}
-nav button{background:transparent;border:1px solid transparent;padding:.5rem .9rem;border-radius:10px;font-weight:600;cursor:pointer}
-nav button.active,nav button:hover{background:rgba(255,255,255,0.06);box-shadow:var(--shadow)}
+    body.dark {
+      --bg-a: #0f1117;
+      --bg-b: #12131a;
+      --card: #14151b;
+      --text: #e9ecf5;
+      --muted: #9aa1b8;
+      --border: #22242a;
+      --glass: rgba(255,255,255,0.02);
+      --shadow: 0 8px 28px rgba(0,0,0,0.6);
+    }
 
-/* cards */
-.card{background:var(--card);border-radius:var(--radius);padding:1rem;margin-bottom:1rem;border:1px solid var(--border);box-shadow:var(--shadow);transition:transform .18s ease,box-shadow .18s ease}
-.card:hover{transform:translateY(-6px)}
-.small{font-size:.88rem;color:var(--muted)}
+    /* ----------------- RESET / BASE ----------------- */
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      color:var(--text);
+      background: linear-gradient(180deg,var(--bg-a),var(--bg-b));
+      transition: background .35s ease, color .25s ease;
+      -webkit-font-smoothing:antialiased;
+      padding-bottom:60px;
+    }
+    .container{max-width:1100px;margin:18px auto;padding:12px}
+    h1,h2,h3{margin-bottom:8px}
+    .small{font-size:13px;color:var(--muted)}
 
-/* layout */
-.grid{display:grid;grid-template-columns:1fr 360px;gap:1rem}
-@media(max-width:980px){.grid{grid-template-columns:1fr}}
+    /* ----------------- HEADER / NAV ----------------- */
+    header{display:flex;align-items:center;gap:12px;padding:12px;border-radius:14px;background:var(--card);box-shadow:var(--shadow);border:1px solid var(--border);position:sticky;top:12px;z-index:40}
+    .logo{display:flex;gap:10px;align-items:center}
+    .logo-mark{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;color:white;font-weight:800;cursor:pointer;box-shadow:0 8px 26px rgba(77,107,255,0.12)}
+    nav{margin-left:auto;display:flex;gap:8px}
+    nav button{padding:8px 12px;border-radius:10px;border:1px solid transparent;background:transparent;cursor:pointer;font-weight:700}
+    nav button.active{background:linear-gradient(90deg,var(--accent),var(--accent2));color:white;box-shadow:0 8px 22px rgba(77,107,255,0.12)}
 
-/* UI */
-.btn{background:linear-gradient(90deg,var(--accent),var(--accent2));color:white;border:none;padding:.6rem .9rem;border-radius:10px;cursor:pointer;font-weight:700;box-shadow:0 8px 22px rgba(0,0,0,0.08);transition:transform .12s ease}
-.btn:hover{transform:translateY(-3px)}
-.btn.ghost{background:transparent;border:1px solid var(--border);color:var(--text);box-shadow:none}
-.input{padding:.6rem;border-radius:10px;border:1px solid var(--border);background:var(--glass);width:100%}
+    /* ----------------- LAYOUT ----------------- */
+    .grid{display:grid;grid-template-columns:1fr 360px;gap:14px;margin-top:14px}
+    @media (max-width:980px){ .grid{grid-template-columns:1fr} }
 
-/* games */
-.game-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1rem}
-.game-tile{cursor:pointer;padding:1rem;border-radius:12px;text-align:center}
+    .card{background:var(--card);padding:14px;border-radius:12px;border:1px solid var(--border);box-shadow:var(--shadow);transition:transform .12s ease}
+    .card:hover{transform:translateY(-6px)}
 
-/* memory / tiles */
-.board{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-.tile{background:linear-gradient(180deg,#fff,#f7fbff);padding:12px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:700;cursor:pointer;min-height:72px;transition:transform .18s,background .18s}
-.tile.revealed{background:linear-gradient(90deg,var(--accent),var(--accent2));color:white;transform:scale(1.05)}
+    /* ----------------- UI ----------------- */
+    .btn{background:linear-gradient(90deg,var(--accent),var(--accent2));color:white;border:none;padding:8px 12px;border-radius:10px;cursor:pointer;font-weight:800}
+    .btn.ghost{background:transparent;border:1px solid var(--border);color:var(--text)}
+    .input{padding:8px;border-radius:10px;border:1px solid var(--border);width:100%;background:var(--glass);color:var(--text);}
 
-/* match boxes */
-.match-row{display:flex;gap:1rem}
-.match-col{flex:1}
-.match-box{min-height:56px;border-radius:10px;padding:.6rem;border:2px dashed var(--border);background:transparent;transition:background .12s}
-.match-box.dragover{background:linear-gradient(90deg,rgba(77,107,255,0.06),rgba(93,212,198,0.03))}
-.draggable{padding:.5rem;border-radius:8px;background:var(--card);border:1px solid var(--border);cursor:grab;margin-bottom:.4rem}
+    /* ----------------- GAMES ----------------- */
+    .game-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+    .game-tile{cursor:pointer;padding:12px;border-radius:12px;text-align:center}
+    .game-tile:hover{transform:translateY(-6px);}
 
-/* achievements */
-.ach-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.6rem}
-.ach{display:flex;gap:.8rem;align-items:center;padding:.6rem;border-radius:10px;background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);border:1px solid var(--border)}
-.ach.locked{opacity:.45}
-.ach .icon{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;color:white;font-weight:800}
-.ach .meta{flex:1}
-.ach-count{font-weight:900;color:var(--accent);}
+    /* memory tiles */
+    .board{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+    .tile{background:linear-gradient(180deg,#fff,#f7fbff);padding:12px;border-radius:10px;display:flex;align-items:center;justify-content:center;min-height:70px;font-weight:800;cursor:pointer;transition:transform .12s,background .12s}
+    .tile.revealed{background:linear-gradient(90deg,var(--accent),var(--accent2));color:white;transform:scale(1.03)}
 
-/* palette preview */
-.palette-preview{display:inline-block;padding:.3rem .6rem;border-radius:999px;margin-right:.4rem;font-weight:700;color:white}
+    /* match (drag & drop) */
+    .match-wrap{display:flex;gap:12px;flex-wrap:wrap}
+    .col{flex:1;min-width:220px}
+    .match-box{min-height:56px;border-radius:10px;padding:8px;border:2px dashed var(--border);background:transparent;transition:background .12s}
+    .match-box.dragover{background:linear-gradient(90deg,rgba(77,107,255,0.06),rgba(93,212,198,0.03))}
+    .draggable{padding:8px;border-radius:8px;border:1px solid var(--border);background:var(--card);margin-bottom:8px;cursor:grab}
 
-/* gentle animation */
-.fade{animation:fadeIn .45s ease}
-@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+    /* achievements */
+    .ach-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px}
+    .ach{display:flex;gap:10px;align-items:center;padding:10px;border-radius:10px;border:1px solid var(--border);background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent)}
+    .ach.locked{opacity:.45}
+    .ach .icon{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;color:white;font-weight:800}
 
-/* easter egg hint */
-.hint{font-size:.85rem;color:var(--muted);margin-top:.5rem}
+    /* palette preview */
+    .palette-preview{display:inline-block;padding:6px 10px;border-radius:999px;color:white;font-weight:800}
 
-</style>
+    /* small helpers */
+    .muted{color:var(--muted);font-size:13px}
+    .hint{font-size:13px;color:var(--muted);margin-top:8px}
+
+  </style>
 </head>
 <body>
 
-<header class="card" style="display:flex;align-items:center;gap:1rem">
-  <div class="logo-row">
-    <div class="logo-mark" id="logoMark" title="Fes clic per buscar un secret">FQ</div>
-    <div>
-      <div style="font-weight:800">FisQuim Quest</div>
-      <div class="title-small">Aprèn concentracions i dissolucions — jugant</div>
-    </div>
-  </div>
-  <nav>
-    <button id="btn-apunts" class="active" onclick="nav('apunts')">📘 Apunts</button>
-    <button id="btn-jocs" onclick="nav('jocs')">🎮 Jocs</button>
-    <button id="btn-problemes" onclick="nav('problemes')">🧪 Problemes</button>
-    <button id="btn-logros" onclick="nav('logros')">🏆 Logros</button>
-    <button id="btn-config" onclick="nav('config')">⚙️ Configuració</button>
-  </nav>
-</header>
-
-<main class="container">
-  <div class="grid">
-
-    <div>
-      <!-- APUNTS -->
-      <section id="apunts" class="card">
-        <h2>Apunts essencials</h2>
-        <p class="small">Estructurat i esquemàtic per a estudiar ràpid però amb tot el que necessites.</p>
-
-        <div class="card">
-          <h3>Conceptes bàsics</h3>
-          <ul>
-            <li><b>Solut</b>: el que es dissol (p. ex. sal).</li>
-            <li><b>Dissolvent</b>: el que dissol (p. ex. aigua).</li>
-            <li><b>Dissolució</b>: barreja homogènia de solut + dissolvent.</li>
-          </ul>
-          <p class="small">TRUC: <i>solut</i> = menys; <i>dissolvent</i> = més.</p>
-        </div>
-
-        <div class="card">
-          <h3>Fórmules útils</h3>
-          <p><b>g/L</b> = grams de solut ÷ litres de dissolució</p>
-          <p><b>% massa</b> = (massa solut ÷ massa total) × 100</p>
-          <p class="small">Passos: identifica, converteix unitats, aplica fórmula.</p>
-        </div>
-
-        <div class="card">
-          <h3>Mini-pràctica ràpida</h3>
-          <div style="display:flex;gap:.6rem;margin-bottom:.6rem">
-            <input id="inpG" class="input" placeholder="grams solut (ex. 30)" />
-            <input id="inpML" class="input" placeholder="ml dissolució (ex. 600)" />
-            <button class="btn" onclick="calcGL()">Calcula g/L</button>
-          </div>
-          <div id="outGL" class="small"></div>
-
-          <div style="height:8px"></div>
-
-          <div style="display:flex;gap:.6rem;margin-top:.6rem">
-            <input id="inpS" class="input" placeholder="g solut" />
-            <input id="inpD" class="input" placeholder="g dissolvent" />
-            <button class="btn" onclick="calcPct()">Calcula % massa</button>
-          </div>
-          <div id="outPct" class="small"></div>
-        </div>
-
-      </section>
-
-      <!-- JOCS -->
-      <section id="jocs" class="card" style="display:none">
-        <h2>Jocs</h2>
-        <p class="small">Jocs dissenyats per practicar conceptes i càlculs.</p>
-
-        <div class="game-grid" style="margin-top:1rem">
-          <div class="game-tile card" onclick="startCalcGame()"><h3>🧮 Ràfega de càlculs</h3><p class="small">Preguntes nombroses ràpides.</p></div>
-          <div class="game-tile card" onclick="startMatchGame()"><h3>🔗 Arrossega i relaciona (millorat)</h3><p class="small">Drag & drop funció robusta.</p></div>
-          <div class="game-tile card" onclick="startLabGame()"><h3>⚗ Laboratori (simulador)</h3><p class="small">Prepara una dissolució amb restriccions.</p></div>
-          <div class="game-tile card" onclick="startTimed()"><h3>⏱ Repte cronometrat</h3><p class="small">Resol problemes en temps limitat.</p></div>
-          <div class="game-tile card" onclick="startFillBlank()"><h3>✍️ Omple els buits</h3><p class="small">Practica definicions i fórmules.</p></div>
-        </div>
-
-        <div id="gameArea" style="margin-top:1rem"></div>
-      </section>
-
-      <!-- PROBLEMES -->
-      <section id="problemes" class="card" style="display:none">
-        <h2>Problemes reals</h2>
-        <p class="small">Inclou els exercicis del PDF amb solució pas a pas i possibilitat d'intentar abans de veure la solució completa.</p>
-        <div id="problemesArea"></div>
-      </section>
-
-      <!-- LOGROS -->
-      <section id="logros" class="card" style="display:none">
-        <h2>Logros i Estadístiques</h2>
-        <p class="small">A sota veus el nombre total de logros/desbloquejats i la llista completa amb icones.</p>
-        <div style="display:flex;justify-content:space-between;align-items:center;gap:1rem;margin-bottom:.8rem">
-          <div><b>Total desbloquejats:</b> <span id="totalUnlocked" class="ach-count">0</span> / <span id="totalAll" class="ach-count">0</span></div>
-          <div class="small">Pista: explora la pàgina: hi ha easter eggs!</div>
-        </div>
-        <div id="achGrid" class="ach-grid"></div>
-      </section>
-
-      <!-- CONFIG -->
-      <section id="config" class="card" style="display:none">
-        <h2>Configuració</h2>
-        <div style="display:flex;gap:1rem;align-items:center">
-          <button class="btn" onclick="toggleDark()">🌙 Mode fosc / Clar</button>
-          <div style="flex:1"></div>
-        </div>
-        <div style="height:10px"></div>
-        <h3>Paletes (previsualitza abans d'aplicar)</h3>
-        <div style="display:flex;gap:.6rem;align-items:center">
-          <div>
-            <div class="palette-preview" id="preview-default" style="background:linear-gradient(90deg,var(--accent),var(--accent2))">DEF</div>
-            <button class="btn ghost" onclick="applyPalette('default')">Aplica</button>
-          </div>
-          <div>
-            <div class="palette-preview" id="preview-menta" style="background:linear-gradient(90deg,#48d8b4,#7afbe6)">MENTA</div>
-            <button class="btn ghost" onclick="applyPalette('menta')">Aplica</button>
-          </div>
-          <div>
-            <div class="palette-preview" id="preview-magma" style="background:linear-gradient(90deg,#ff5a3d,#ffb36e)">MAG</div>
-            <button class="btn ghost" onclick="applyPalette('magma')">Aplica</button>
-          </div>
-        </div>
-        <p class="hint">Les paletes afecten tant el mode clar com el fosc (fons, degradats i botons).</p>
-      </section>
-
+  <header>
+    <div class="logo">
+      <div class="logo-mark" id="logoMark" title="Fes clic per trovar secrets">FQ</div>
+      <div>
+        <div style="font-weight:900">FisQuim Quest</div>
+        <div class="small">Concentracions i dissolucions — aprèn jugant</div>
+      </div>
     </div>
 
-    <!-- LATERAL -->
-    <aside>
-      <div class="card">
-        <h3>Estat</h3>
-        <p class="small">Punts: <b id="points">0</b></p>
-        <p class="small">Aciertos seguits: <b id="streak">0</b></p>
-        <p class="small">Secrets trobats: <b id="secrets">0</b></p>
-        <div style="height:8px"></div>
-        <div class="small">Consells: converteix sempre ml→L abans de calcular g/L.</div>
+    <nav id="mainNav">
+      <button data-target="apunts" class="active">📘 Apunts</button>
+      <button data-target="jocs">🎮 Jocs</button>
+      <button data-target="problemes">🧪 Problemes</button>
+      <button data-target="logros">🏆 Logros</button>
+      <button data-target="config">⚙️ Config</button>
+    </nav>
+  </header>
+
+  <main class="container">
+    <div class="grid">
+      <!-- MAIN COLUMN -->
+      <div>
+        <!-- APUNTS -->
+        <section id="apunts" class="card">
+          <h2>Apunts essencials</h2>
+          <p class="small">Esquemàtics però suficients per preparar-te per l'examen.</p>
+
+          <div class="card" style="margin-top:12px">
+            <h3>Conceptes bàsics</h3>
+            <ul>
+              <li><b>Solut</b>: allò que es dissol (p. ex. sal, sucre).</li>
+              <li><b>Dissolvent</b>: allò que dissol (normalment aigua).</li>
+              <li><b>Dissolució</b>: barreja homogènia solut + dissolvent.</li>
+            </ul>
+            <p class="muted">Truc: solut = menys; dissolvent = més.</p>
+          </div>
+
+          <div class="card" style="margin-top:12px">
+            <h3>Formules clau</h3>
+            <p><b>Concentració g/L</b>: <code>g/L = grams solut ÷ litres dissolució</code></p>
+            <p><b>% en massa</b>: <code>% = (massa solut ÷ massa total) × 100</code></p>
+            <p class="muted">Recorda convertir ml → L dividint per 1000.</p>
+          </div>
+
+          <div class="card" style="margin-top:12px">
+            <h3>Minipràctica</h3>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <input id="inpG" class="input" placeholder="grams solut (ex. 30)">
+              <input id="inpML" class="input" placeholder="ml dissolució (ex. 600)">
+              <button class="btn" id="btnCalcGL">Calcula g/L</button>
+            </div>
+            <div id="outGL" class="muted" style="margin-top:8px"></div>
+
+            <div style="height:12px"></div>
+
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <input id="inpS" class="input" placeholder="g solut">
+              <input id="inpD" class="input" placeholder="g dissolvent">
+              <button class="btn" id="btnCalcPct">Calcula % massa</button>
+            </div>
+            <div id="outPct" class="muted" style="margin-top:8px"></div>
+          </div>
+        </section>
+
+        <!-- JOCS -->
+        <section id="jocs" class="card" style="display:none">
+          <h2>Jocs d'estudi</h2>
+          <p class="small">Practica ràpidament: càlculs, arrastrar, laboratori i repte cronometrat.</p>
+
+          <div class="game-grid" style="margin-top:12px">
+            <div class="game-tile card" id="tileCalc">🧮 Ràfega de càlculs</div>
+            <div class="game-tile card" id="tileMatch">🔗 Arrossega i relaciona</div>
+            <div class="game-tile card" id="tileLab">⚗ Laboratori</div>
+            <div class="game-tile card" id="tileTimed">⏱ Repte cronometrat</div>
+            <div class="game-tile card" id="tileFill">✍️ Omple els buits</div>
+          </div>
+
+          <div id="gameArea" style="margin-top:12px"></div>
+        </section>
+
+        <!-- PROBLEMES -->
+        <section id="problemes" class="card" style="display:none">
+          <h2>Problemes reals</h2>
+          <p class="small">Problemes del PDF i alguns de creats per practicar. Intenta abans de veure la solució.</p>
+          <div id="problemesArea" style="margin-top:12px"></div>
+        </section>
+
+        <!-- LOGROS -->
+        <section id="logros" class="card" style="display:none">
+          <h2>Logros</h2>
+          <p class="small">A la dreta veus el total. Aquí la llista de tots els logros amb icona i quantes vegades.</p>
+          <div style="margin-top:12px" class="ach-grid" id="achGrid"></div>
+        </section>
+
+        <!-- CONFIG -->
+        <section id="config" class="card" style="display:none">
+          <h2>Configuració</h2>
+          <div style="display:flex;gap:8px;align-items:center">
+            <button class="btn" id="btnToggleDark">🌙 Mode fosc / clar</button>
+            <div style="flex:1"></div>
+          </div>
+
+          <div style="margin-top:12px">
+            <h3>Paletes (previsualitza i aplica)</h3>
+            <div style="display:flex;gap:12px;align-items:center">
+              <div>
+                <div class="palette-preview" id="preview-default" style="background:linear-gradient(90deg,#4d6bff,#5dd4c6)">DEF</div>
+                <div style="margin-top:6px"><button class="btn ghost" data-palette="default">Aplica</button></div>
+              </div>
+              <div>
+                <div class="palette-preview" id="preview-menta" style="background:linear-gradient(90deg,#48d8b4,#7afbe6)">MENTA</div>
+                <div style="margin-top:6px"><button class="btn ghost" data-palette="menta">Aplica</button></div>
+              </div>
+              <div>
+                <div class="palette-preview" id="preview-magma" style="background:linear-gradient(90deg,#ff5a3d,#ffb36e)">MAGMA</div>
+                <div style="margin-top:6px"><button class="btn ghost" data-palette="magma">Aplica</button></div>
+              </div>
+            </div>
+            <p class="hint">Les paletes afecten botons, icones i el degradat de fons. Funcionen tant en clar com en fosc.</p>
+          </div>
+        </section>
+
       </div>
 
-      <div class="card" style="margin-top:1rem">
-        <h4>Progres ràpid</h4>
-        <div style="display:flex;gap:.4rem;flex-wrap:wrap">
-          <button class="btn ghost" onclick="nav('jocs')">Practica</button>
-          <button class="btn ghost" onclick="nav('problemes')">Problemes</button>
-          <button class="btn ghost" onclick="nav('logros')">Logros</button>
+      <!-- SIDEBAR -->
+      <aside>
+        <div class="card">
+          <h3>Estat</h3>
+          <p class="small">Punts: <b id="points">0</b></p>
+          <p class="small">Aciertos seguits: <b id="streak">0</b></p>
+          <p class="small">Secrets trobats: <b id="secrets">0</b></p>
         </div>
-      </div>
-    </aside>
-  </div>
-</main>
 
-<script>
-/* --------------------------- ESTAT GLOBAL --------------------------- */
-const state = {
-  points: Number(localStorage.getItem('fq_points')||0),
-  streak: Number(localStorage.getItem('fq_streak')||0),
-  secrets: Number(localStorage.getItem('fq_secrets')||0),
-  achievements: JSON.parse(localStorage.getItem('fq_ach')||'{}'),
-  palette:'default'
-};
+        <div class="card" style="margin-top:12px">
+          <h4>Accions ràpides</h4>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button class="btn ghost" onclick="navTo('jocs')">Practica</button>
+            <button class="btn ghost" onclick="navTo('problemes')">Problemes</button>
+            <button class="btn ghost" onclick="navTo('logros')">Logros</button>
+          </div>
+        </div>
+      </aside>
 
-// default achievements list (expanded)
-const ACH = {
-  readNotes:{id:'readNotes',name:'Lector incansable',desc:'Has obert la secció d'apunts',icon:'📘'},
-  quickCalc:{id:'quickCalc',name:'Calculador ràpid',desc:'Has resolt 10 càlculs',icon:'🧮'},
-  matchMaster:{id:'matchMaster',name:'Relacions netes',desc:'Has completat el joc de relacions',icon:'🔗'},
-  labWizard:{id:'labWizard',name:'Mestre del laboratori',desc:'Tens una dissolució perfecta',icon:'⚗️'},
-  problemSolver:{id:'problemSolver',name:'Problemes ressolts',desc:'Has resolt 5 problemes reals',icon:'🧪'},
-  explorer:{id:'explorer',name:'Explorador',desc:'Has visitat totes les seccions',icon:'🧭'},
-  easterEgg:{id:'easterEgg',name:'Caçador d'ous',desc:'Has trobat un easter egg',icon:'🥚'},
-  secretClick:{id:'secretClick',name:'Click misteriós',desc:'Has clicat el logo 5 vegades',icon:'✨'},
-  nightOwl:{id:'nightOwl',name:'Búho nocturn',desc:'Has activat mode fosc',icon:'🌙'},
-  paletteStylist:{id:'paletteStylist',name:'Estilista',desc:'Has aplicat una paleta',icon:'🎨'},
-  speedy:{id:'speedy',name:'Ràpid',desc:'Resol un problema en <10s',icon:'⚡'}
-};
+    </div>
+  </main>
 
-// ensure achievements exist with unlocked flag
-for(const k in ACH){ if(!state.achievements[k]) state.achievements[k] = {unlocked:false, times:0}; }
-localStorage.setItem('fq_ach', JSON.stringify(state.achievements));
+  <script>
+    /* ================== ESTAT ================== */
+    const state = {
+      points: Number(localStorage.getItem('fq_points') || 0),
+      streak: Number(localStorage.getItem('fq_streak') || 0),
+      secrets: Number(localStorage.getItem('fq_secrets') || 0),
+      achievements: JSON.parse(localStorage.getItem('fq_ach') || '{}'),
+      palette: localStorage.getItem('fq_palette') || 'default'
+    };
 
-/* --------------------------- NAV --------------------------- */
-function nav(id){
-  document.querySelectorAll('section').forEach(s=>s.style.display='none');
-  const sec = document.getElementById(id);
-  if(sec) sec.style.display='block';
-  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
-  const btn = document.getElementById('btn-'+id);
-  if(btn) btn.classList.add('active');
-  // unlock explorer if visited all
-  checkExplorer();
-}
+    const ACH = {
+      readNotes: {id:'readNotes', name:'Lector incansable', desc:'Has obert la secció d\'apunts', icon:'📘'},
+      quickCalc: {id:'quickCalc', name:'Calculador ràpid', desc:'10 càlculs encertats', icon:'🧮'},
+      matchMaster: {id:'matchMaster', name:'Relacions netes', desc:'Has completat el drag&drop', icon:'🔗'},
+      labWizard: {id:'labWizard', name:'Mestre del laboratori', desc:'Has assolit objectiu', icon:'⚗️'},
+      problemSolver: {id:'problemSolver', name:'Problemes resolts', desc:'5 problemes reals', icon:'🧪'},
+      explorer: {id:'explorer', name:'Explorador', desc:'Has visitat totes les seccions', icon:'🧭'},
+      easterEgg: {id:'easterEgg', name:'Caçador d\'ous', desc:'Has trobat un easter egg', icon:'🥚'},
+      secretClick: {id:'secretClick', name:'Click misteriós', desc:'Has clicat el logo 10 vegades', icon:'✨'},
+      nightOwl: {id:'nightOwl', name:'Búho nocturn', desc:'Has activat mode fosc', icon:'🌙'},
+      paletteStylist: {id:'paletteStylist', name:'Estilista', desc:'Has aplicat una paleta', icon:'🎨'},
+      speedy: {id:'speedy', name:'Ràpid', desc:'Has resolt en menys de 10s', icon:'⚡'}
+    };
 
-/* init */
-nav('apunts'); updateUI(); renderAchievements();
+    // init achievements data if absent
+    for(const k in ACH){
+      if(!state.achievements[k]) state.achievements[k] = {unlocked: false, times: 0};
+    }
 
-/* --------------------------- APUNTS: calculs --------------------------- */
-function calcGL(){
-  const g = Number(document.getElementById('inpG').value);
-  const ml = Number(document.getElementById('inpML').value);
-  if(!g || !ml) { document.getElementById('outGL').innerText='Introdueix nombres vàlids.'; return; }
-  const L = ml/1000;
-  const res = g / L;
-  document.getElementById('outGL').innerText = `${res.toFixed(2)} g/L`;
-  award('quickCalc',1); // small progress
-}
-function calcPct(){
-  const s = Number(document.getElementById('inpS').value);
-  const d = Number(document.getElementById('inpD').value);
-  if(isNaN(s) || isNaN(d)){ document.getElementById('outPct').innerText='Dades invàlides'; return; }
-  const total = s + d;
-  const pct = (s/total)*100;
-  document.getElementById('outPct').innerText = `${pct.toFixed(2)} % en massa`;
-}
+    /* ================ UI HELPERS ================= */
+    function saveState(){
+      localStorage.setItem('fq_points', state.points);
+      localStorage.setItem('fq_streak', state.streak);
+      localStorage.setItem('fq_secrets', state.secrets);
+      localStorage.setItem('fq_ach', JSON.stringify(state.achievements));
+      localStorage.setItem('fq_palette', state.palette);
+    }
 
-// when user opens notes, mark read
-document.getElementById('btn-apunts').addEventListener('click', ()=> unlock('readNotes'));
+    function updateSidebar(){
+      document.getElementById('points').innerText = state.points;
+      document.getElementById('streak').innerText = state.streak;
+      document.getElementById('secrets').innerText = state.secrets;
+    }
 
-/* --------------------------- ACHIEVEMENTS --------------------------- */
-function unlock(key){
-  if(!state.achievements[key]) state.achievements[key] = {unlocked:false,times:0};
-  if(!state.achievements[key].unlocked) state.achievements[key].unlocked = true;
-  state.achievements[key].times += 1;
-  localStorage.setItem('fq_ach', JSON.stringify(state.achievements));
-  renderAchievements();
-}
-function award(key,amount=1){
-  // award points and optionally achievement progress
-  state.points += 2*amount; state.streak += 1;
-  localStorage.setItem('fq_points', state.points);
-  localStorage.setItem('fq_streak', state.streak);
-  updateUI();
-  // if achievement key passed, increment/check
-  if(key){
-    state.achievements[key].times = (state.achievements[key].times||0) + amount;
-    if(key==='quickCalc' && state.achievements[key].times >= 10) unlock('quickCalc');
-    if(key==='problemSolver' && state.achievements[key].times >= 5) unlock('problemSolver');
-    localStorage.setItem('fq_ach', JSON.stringify(state.achievements));
+    function unlock(key){
+      if(!state.achievements[key]) state.achievements[key] = {unlocked:false, times:0};
+      if(!state.achievements[key].unlocked){
+        state.achievements[key].unlocked = true;
+      }
+      state.achievements[key].times = (state.achievements[key].times || 0) + 1;
+      saveState();
+      renderAchievements();
+    }
+
+    function awardPoints(n){
+      state.points += n;
+      state.streak += 1;
+      saveState();
+      updateSidebar();
+    }
+
+    function resetStreak(){
+      state.streak = 0;
+      saveState();
+      updateSidebar();
+    }
+
+    /* ================ NAVIGATION ================= */
+    const navButtons = document.querySelectorAll('nav button[data-target]');
+    function navTo(id){
+      // hide all sections
+      document.querySelectorAll('main .card, main section').forEach(el=>{
+        // hide only the sections with ids we control:
+      });
+      // show target and set active button
+      navButtons.forEach(btn=>{
+        if(btn.dataset.target === id){
+          btn.classList.add('active');
+        } else btn.classList.remove('active');
+      });
+      // show/hide sections explicitly
+      const sections = ['apunts','jocs','problemes','logros','config'];
+      sections.forEach(s => {
+        const el = document.getElementById(s);
+        if(!el) return;
+        el.style.display = (s === id) ? 'block' : 'none';
+      });
+      // mark visited
+      localStorage.setItem('visited_'+id, '1');
+      checkExplorer();
+    }
+
+    // wire nav buttons
+    navButtons.forEach(btn => {
+      btn.addEventListener('click', ()=> navTo(btn.dataset.target));
+    });
+
+    // initialize show
+    navTo('apunts');
+
+    /* ================ APUNTS ACTIONS =============== */
+    document.getElementById('btnCalcGL').addEventListener('click', ()=>{
+      const g = Number(document.getElementById('inpG').value);
+      const ml = Number(document.getElementById('inpML').value);
+      if(!g || !ml){ document.getElementById('outGL').innerText = 'Introdueix valors vàlids.'; return; }
+      const L = ml / 1000;
+      const res = g / L;
+      document.getElementById('outGL').innerText = `${res.toFixed(2)} g/L`;
+      awardPoints(5);
+      // progress quickCalc
+      state.achievements.quickCalc.times = (state.achievements.quickCalc.times || 0) + 1;
+      if(state.achievements.quickCalc.times >= 10) unlock('quickCalc');
+      saveState();
+      renderAchievements();
+    });
+
+    document.getElementById('btnCalcPct').addEventListener('click', ()=>{
+      const s = Number(document.getElementById('inpS').value);
+      const d = Number(document.getElementById('inpD').value);
+      if(isNaN(s) || isNaN(d)){ document.getElementById('outPct').innerText = 'Introdueix nombres vàlids.'; return; }
+      const total = s + d;
+      const pct = (s / total) * 100;
+      document.getElementById('outPct').innerText = `${pct.toFixed(2)} % en massa`;
+      awardPoints(3);
+    });
+
+    /* ================ ACHIEVEMENTS RENDER =========== */
+    function renderAchievements(){
+      const container = document.getElementById('achGrid');
+      container.innerHTML = '';
+      let unlockedCount = 0, total = Object.keys(ACH).length;
+      for(const k in ACH){
+        const meta = ACH[k];
+        const stateA = state.achievements[k] || {unlocked:false, times:0};
+        if(stateA.unlocked) unlockedCount++;
+        const div = document.createElement('div');
+        div.className = 'ach' + (stateA.unlocked ? '' : ' locked');
+        div.innerHTML = `
+          <div class="icon">${meta.icon}</div>
+          <div style="flex:1">
+            <div style="font-weight:800">${meta.name}</div>
+            <div class="small">${meta.desc}</div>
+          </div>
+          <div style="text-align:right">
+            <div class="small">vegades</div>
+            <div style="font-weight:800">${stateA.times || 0}</div>
+          </div>`;
+        container.appendChild(div);
+      }
+      // update header counts
+      document.querySelectorAll('#logros .small')[0]; // not necessary but reserved
+    }
     renderAchievements();
-  }
-}
-function updateUI(){
-  document.getElementById('points').innerText = state.points;
-  document.getElementById('streak').innerText = state.streak;
-  document.getElementById('secrets').innerText = state.secrets;
-}
 
-function renderAchievements(){
-  const grid = document.getElementById('achGrid');
-  grid.innerHTML = '';
-  let unlocked=0, total=0;
-  for(const k in ACH){ total++; const a=ACH[k]; const s=state.achievements[k]||{unlocked:false,times:0}; if(s.unlocked) unlocked++;
-    const div = document.createElement('div'); div.className = 'ach ' + (s.unlocked? '':'locked');
-    div.innerHTML = `<div class='icon'>${a.icon}</div><div class='meta'><b>${a.name}</b><div class='small'>${a.desc}</div></div><div style="text-align:right"><div class='small'>veces: <span class='ach-count'>${s.times||0}</span></div></div>`;
-    grid.appendChild(div);
-  }
-  document.getElementById('totalUnlocked').innerText = unlocked;
-  document.getElementById('totalAll').innerText = total;
-}
+    /* ================ EASTER EGGS =================== */
+    let logoClicks = 0;
+    document.getElementById('logoMark').addEventListener('click', ()=>{
+      logoClicks++;
+      if(logoClicks === 5){
+        state.secrets++; unlock('easterEgg'); saveState(); updateSidebar();
+        alert('Easter egg trobat! 🎉');
+      }
+      if(logoClicks === 10){
+        unlock('secretClick'); alert('Secret avançat desblocat! ✨');
+      }
+      // reset clicks slowly
+      setTimeout(()=>{ logoClicks = 0; }, 4000);
+    });
 
-/* --------------------------- EASTER EGGS / SECRETS --------------------------- */
-let logoClicks = 0; document.getElementById('logoMark').addEventListener('click', ()=>{
-  logoClicks++; if(logoClicks===5){
-    state.secrets++; localStorage.setItem('fq_secrets', state.secrets); updateUI(); unlock('easterEgg'); alert('Has trobat un easter egg! 🎉');
-  }
-  if(logoClicks===10){ unlock('secretClick'); alert('Secret avançat desblocat! ✨'); }
-});
+    document.addEventListener('keydown', (e)=>{
+      if(e.ctrlKey && e.key.toLowerCase() === 'k'){
+        unlock('explorer'); alert('Has obert el mapa secret! 🔍');
+      }
+    });
 
-// secret key combo: CTRL+K -> secret hint
-document.addEventListener('keydown',(e)=>{ if(e.ctrlKey && e.key.toLowerCase()==='k'){ unlock('explorer'); alert('Has obert el mapa secret! 🔍'); }});
+    function checkExplorer(){
+      const sections = ['apunts','jocs','problemes','logros','config'];
+      let visited = 0;
+      sections.forEach(s => { if(localStorage.getItem('visited_'+s) === '1') visited++; });
+      if(visited === sections.length) unlock('explorer');
+    }
 
-/* --------------------------- PALETTES (apliquen també en mode fosc) --------------------------- */
-function applyPalette(p){ state.palette = p; localStorage.setItem('fq_palette', p); if(p==='menta'){ setVars('#e6fbf7','#d3fff6','#48d8b4','#7afbe6','#c8fff2'); }
-  else if(p==='magma'){ setVars('#fff3ee','#fff6ec','#ff5a3d','#ffb36e','#ffe9de'); }
-  else { setVars('#f4f7ff','#edf5ff','#4d6bff','#5dd4c6','#f1f9ff'); }
-  unlock('paletteStylist'); }
-function setVars(bg1,bg2,accent,accent2,bgAccent){
-  document.documentElement.style.setProperty('--bg1',bg1);
-  document.documentElement.style.setProperty('--bg2',bg2);
-  document.documentElement.style.setProperty('--accent',accent);
-  document.documentElement.style.setProperty('--accent2',accent2);
-  // also tweak body gradient for more life
-  document.body.style.background = `linear-gradient(180deg, ${bg1}, ${bg2})`;
-}
-// load stored palette if any
-const savedPal = localStorage.getItem('fq_palette')||'default'; if(savedPal!=='default') applyPalette(savedPal);
+    /* ================ PALETTES ===================== */
+    // palettes modify CSS variables and body background gradient to be visible in both modes
+    function applyPalette(name){
+      state.palette = name; localStorage.setItem('fq_palette', name);
+      if(name === 'menta'){
+        setVariables('#e6fbf7', '#d3fff6', '#48d8b4', '#7afbe6', '#c8fff2');
+      } else if(name === 'magma'){
+        setVariables('#fff3ee', '#fff6ec', '#ff5a3d', '#ffb36e', '#ffe9de');
+      } else { // default
+        setVariables('#f4f7ff', '#edf5ff', '#4d6bff', '#5dd4c6', '#f1f9ff');
+      }
+      unlock('paletteStylist');
+      saveState();
+      renderAchievements();
+    }
+    function setVariables(bg1,bg2,accent,accent2,bgAccent){
+      document.documentElement.style.setProperty('--bg-a', bg1);
+      document.documentElement.style.setProperty('--bg-b', bg2);
+      document.documentElement.style.setProperty('--accent', accent);
+      document.documentElement.style.setProperty('--accent2', accent2);
+      // force body background to update
+      document.body.style.background = `linear-gradient(180deg, ${bg1}, ${bg2})`;
+    }
+    // wire palette buttons
+    document.querySelectorAll('[data-palette]').forEach(btn => {
+      btn.addEventListener('click', ()=> applyPalette(btn.dataset.palette));
+    });
+    // load saved palette
+    if(state.palette && state.palette !== 'default') applyPalette(state.palette);
 
-/* --------------------------- GAMES: improved drag & drop --------------------------- */
-function startMatchGame(){
-  nav('jocs'); const area = document.getElementById('gameArea'); area.innerHTML = '';
-  const terms = [ {t:'Solut',d:'Substància que es dissol'}, {t:'Dissolvent',d:'Substància que dissol'} , {t:'g/L',d:'grams de solut per litre'}, {t:'% massa',d:'(massa solut / massa total) ×100'} ];
-  const defs = shuffle(terms.map(x=>x.d));
-  const left = document.createElement('div'); left.className='match-col';
-  terms.forEach(t=>{
-    const card = document.createElement('div'); card.className='card'; card.style.marginBottom='8px';
-    card.innerHTML = `<b>${t.t}</b><div class='match-box' data-term='${t.t}'></div>`;
-    left.appendChild(card);
-  });
-  const right = document.createElement('div'); right.className='match-col';
-  defs.forEach(d=>{
-    const el = document.createElement('div'); el.className='draggable'; el.draggable=true; el.innerText=d;
-    el.addEventListener('dragstart', ev=>{ ev.dataTransfer.setData('text/plain', d); ev.dataTransfer.effectAllowed='move'; });
-    right.appendChild(el);
-  });
+    /* ================ DARK MODE ==================== */
+    const btnDark = document.getElementById('btnToggleDark');
+    btnDark.addEventListener('click', ()=> {
+      document.body.classList.toggle('dark');
+      unlock('nightOwl');
+      saveState();
+    });
 
-  const wrapper = document.createElement('div'); wrapper.style.display='flex'; wrapper.style.gap='1rem'; wrapper.appendChild(left); wrapper.appendChild(right);
-  area.appendChild(wrapper);
+    /* ================ PROBLEMES (del pdf + creats) ========== */
+    const problems = [
+      {q: "Ordena aquestes solucions de més concentrada a menys: a) 20 g solut en 100 g aigua; b) 50 g en 100 g; c) 3 g en 100 g; d) 43 g en 100 g", sol: "b,d,a,c", hint: "Mira quants grams de solut per 100 g aigua."},
+      {q: "S'han dissolt 2 g de sal en 98 g d'aigua. Quin % en massa té la dissolució?", sol: "2.00", hint: "Massa total = 100 g."},
+      {q: "5 g de NaCl es dissolen en aigua fins a completar 250 cm3 de dissolució. Quina és la concentració g/L?", sol: "20.00", hint: "250 cm3 = 0.25 L; divideix grams per litres."},
+      {q: "Volem preparar 400 cm3 de KCl de 12 g/L. Quina quantitat cal pesar?", sol: "4.80", hint: "0.4 L × 12 g/L = ?"},
+      {q: "Es dissolen 35 g de sucre en 120 g d'aigua. Quin % en massa té la dissolució?", sol: "22.58", hint: "Total = 155 g; 35/155×100."}
+      // Pots afegir més aquí...
+    ];
 
-  // attach drop handlers
-  document.querySelectorAll('.match-box').forEach(box=>{
-    box.addEventListener('dragover', e=>{ e.preventDefault(); box.classList.add('dragover'); });
-    box.addEventListener('dragleave', e=>{ box.classList.remove('dragover'); });
-    box.addEventListener('drop', e=>{ e.preventDefault(); box.classList.remove('dragover'); const txt = e.dataTransfer.getData('text/plain'); box.innerHTML = `<div>${txt}</div>`; box.dataset.assigned = txt; });
-  });
+    function renderProblems(){
+      const area = document.getElementById('problemesArea');
+      area.innerHTML = '';
+      problems.forEach((p,i) => {
+        const div = document.createElement('div');
+        div.className = 'card';
+        div.innerHTML = `
+          <h3>Problema ${i+1}</h3>
+          <p>${p.q}</p>
+          <div style="display:flex;gap:8px">
+            <input class="input" id="probInp${i}" placeholder="La teva resposta">
+            <button class="btn" data-i="${i}" id="probBtn${i}">Comprovar</button>
+            <button class="btn ghost" data-i="${i}" id="probHint${i}">Pista</button>
+          </div>
+          <div id="probOut${i}" class="muted" style="margin-top:8px"></div>
+        `;
+        area.appendChild(div);
 
-  // add check button
-  const btn = document.createElement('button'); btn.className='btn'; btn.innerText='Comprovar'; btn.onclick = ()=>{
-    let ok=0; document.querySelectorAll('.match-box').forEach(b=>{ const term=b.dataset.term; const ass=b.dataset.assigned||''; if(matchLogic(term,ass)) ok++; });
-    if(ok===4){ award('matchMaster',1); alert('Perfecte! Has relacionat tot. + punts.'); } else alert(`${ok}/4 correctes.`);
-  };
-  area.appendChild(btn);
-}
-function matchLogic(term, assigned){
-  if(!assigned) return false; assigned = assigned.toLowerCase();
-  if(term==='Solut') return assigned.includes('dissol');
-  if(term==='Dissolvent') return assigned.includes('dissol') && !assigned.includes('solut');
-  if(term==='g/L') return assigned.includes('litre') || assigned.includes('per litre');
-  if(term==='% massa') return assigned.includes('massa');
-  return false;
-}
-function shuffle(a){ return a.sort(()=>Math.random()-0.5); }
+        // add listeners
+        document.getElementById(`probBtn${i}`).addEventListener('click', ()=>{
+          const val = document.getElementById(`probInp${i}`).value.trim().replace(',', '.');
+          const out = document.getElementById(`probOut${i}`);
+          if(!val){ out.innerText = 'Introdueix una resposta'; return; }
+          // compare numeric or textual
+          if(!isNaN(p.sol)){
+            const num = Number(val);
+            if(Math.abs(num - Number(p.sol)) <= 0.5){
+              out.innerText = 'Correcte!'; awardPoints(8); state.achievements.problemSolver.times = (state.achievements.problemSolver.times || 0) + 1;
+              if(state.achievements.problemSolver.times >= 5) unlock('problemSolver');
+              saveState(); renderAchievements();
+            } else out.innerText = `No exacte. Solució: ${p.sol}`;
+          } else {
+            if(val.toLowerCase() === p.sol.toLowerCase()) { out.innerText = 'Correcte!'; awardPoints(8); } else out.innerText = `No. Solució: ${p.sol}`;
+          }
+        });
 
-/* --------------------------- GAMES: calc rapid -------------------------------- */
-let calcCorrect = 0;
-function startCalcGame(){ nav('jocs'); const area=document.getElementById('gameArea'); area.innerHTML='';
-  const card=document.createElement('div'); card.className='card';
-  card.innerHTML = `<h3>Ràfega de càlculs</h3><p class='small'>Respon 10 preguntes ràpidament</p><div id='calcQ'></div><div style='height:8px'></div><div id='calcOut'></div>`;
-  area.appendChild(card);
-  generateCalcRound();
-}
-function generateCalcRound(){
-  const g = randRange(5,80); const ml = randRange(100,1500); const ans = g/(ml/1000);
-  const container = document.getElementById('calcQ'); container.innerHTML = `<p>Quina és la concentració si tens ${g} g en ${ml} ml?</p><input id='calcAns' class='input' placeholder='Resposta (g/L)' /><div style='height:8px'></div><button class='btn' onclick='checkCalcAns(${ans})'>Comprovar</button>`;
-}
-function checkCalcAns(correct){ const u = Number(document.getElementById('calcAns').value); const out=document.getElementById('calcOut'); if(Math.abs(u-correct)<=0.7){ out.innerText='Correcte!'; calcCorrect++; award('quickCalc',1); if(calcCorrect>=10){ unlock('quickCalc'); calcCorrect=0; } generateCalcRound(); } else { out.innerText=`No exacte. Solució: ${correct.toFixed(2)} g/L`; }
-}
-function randRange(a,b){ return Math.floor(Math.random()*(b-a+1))+a; }
+        document.getElementById(`probHint${i}`).addEventListener('click', ()=>{
+          document.getElementById(`probOut${i}`).innerText = `Pista: ${p.hint}`;
+        });
 
-/* --------------------------- GAMES: Lab sim -------------------------------- */
-function startLabGame(){ nav('jocs'); const area=document.getElementById('gameArea'); area.innerHTML='';
-  const html = `<div class='card'><h3>Laboratori</h3><p class='small'>Objectiu: prepara X g/L. Ajusta grams i ml.</p><div style='display:flex;gap:.6rem'><input id='labG' class='input' placeholder='grams solut' /><input id='labML' class='input' placeholder='ml dissolució' /><button class='btn' onclick='checkLabGoal()'>Comprovar</button></div><p id='labMsg' class='small'></p></div>`;
-  area.innerHTML = html; const target = Math.floor(Math.random()*15)+5; document.getElementById('labMsg').innerText = `Objectiu: ${target} g/L`; document.getElementById('labMsg').dataset.goal=target;
-}
-function checkLabGoal(){ const g=Number(document.getElementById('labG').value); const ml=Number(document.getElementById('labML').value); const goal=Number(document.getElementById('labMsg').dataset.goal); if(!g||!ml){ alert('Introdueix valors'); return; } const got = g/(ml/1000); if(Math.abs(got-goal)<=0.5){ award('labWizard',1); alert('Has aconseguit l\'objectiu!'); } else alert(`Tens ${got.toFixed(2)} g/L; objectiu ${goal} g/L`);
-}
+      });
+    }
+    renderProblems();
 
-/* --------------------------- GAMES: Timed challenge --------------------------- */
-function startTimed(){ nav('jocs'); const area=document.getElementById('gameArea'); area.innerHTML='';
-  const html=`<div class='card'><h3>Repte cronometrat</h3><p class='small'>Resol 5 preguntes en 60s</p><div id='timedQ'></div><div style='height:8px'></div><div id='timer'>60</div></div>`;
-  area.innerHTML = html; startTimedRound();
-}
-let timedTimer=null; let timedRemaining=60; let timedCount=0;
-function startTimedRound(){ timedRemaining=60; timedCount=0; document.getElementById('timer').innerText=timedRemaining; timedTimer = setInterval(()=>{ timedRemaining--; document.getElementById('timer').innerText=timedRemaining; if(timedRemaining<=0){ clearInterval(timedTimer); alert('Temps acabat!'); } },1000); nextTimedQ(); }
-function nextTimedQ(){ if(timedCount>=5){ clearInterval(timedTimer); alert('Has completat el repte!'); award('speedy',1); return; } const g=randRange(5,50); const ml=randRange(100,1000); const ans=g/(ml/1000); document.getElementById('timedQ').innerHTML=`<p>${g} g en ${ml} ml → ? g/L</p><input id='tans' class='input' /><button class='btn' onclick='checkTimed(${ans})'>Comprovar</button>`; }
-function checkTimed(correct){ const u=Number(document.getElementById('tans').value); if(Math.abs(u-correct)<=0.7){ timedCount++; award('quickCalc',1); nextTimedQ(); } else alert('No correcte'); }
+    /* ================ GAMES: Match Drag&Drop (millorat) =========== */
+    function startMatchGame(){
+      navTo('jocs');
+      const area = document.getElementById('gameArea');
+      area.innerHTML = '';
+      const terms = [
+        {t:'Solut', d:'Substància que es dissol (ex: sal)'},
+        {t:'Dissolvent', d:'Substància que dissol (ex: aigua)'},
+        {t:'g/L', d:'grams de solut per litre de dissolució'},
+        {t:'% massa', d:'(massa solut / massa total) × 100'}
+      ];
+      const defs = shuffle(terms.map(x => x.d));
+      const left = document.createElement('div'); left.className = 'col';
+      terms.forEach(term => {
+        const card = document.createElement('div'); card.className = 'card'; card.style.marginBottom = '8px';
+        card.innerHTML = `<b>${term.t}</b><div class="match-box" data-term="${term.t}"></div>`;
+        left.appendChild(card);
+      });
+      const right = document.createElement('div'); right.className = 'col';
+      defs.forEach(d => {
+        const el = document.createElement('div');
+        el.className = 'draggable';
+        el.setAttribute('draggable', 'true');
+        el.innerText = d;
+        el.addEventListener('dragstart', ev => {
+          ev.dataTransfer.setData('text/plain', d);
+          ev.dataTransfer.effectAllowed = 'move';
+        });
+        right.appendChild(el);
+      });
 
-/* --------------------------- GAMES: Fill the blank --------------------------- */
-function startFillBlank(){ nav('jocs'); const area=document.getElementById('gameArea'); area.innerHTML='';
-  const s = `La concentració en g/L es calcula com ________ ÷ ________.`;
-  const html=`<div class='card'><h3>Omple els buits</h3><p class='small'>Completa la frase</p><p>${s.replace('________','<input id=fb1 class=input style="width:80px">').replace('________','<input id=fb2 class=input style="width:80px">')}</p><button class='btn' onclick='checkFill()'>Comprovar</button><p id='fbRes'></p></div>`;
-  area.innerHTML = html;
-}
-function checkFill(){ const a=document.getElementById('fb1').value.trim().toLowerCase(); const b=document.getElementById('fb2').value.trim().toLowerCase(); if((a.includes('grams')||a.includes('g')) && (b.includes('litre')||b.includes('l'))) { document.getElementById('fbRes').innerText='Correcte!'; award('matchMaster',1); } else document.getElementById('fbRes').innerText='Revisa la resposta.' }
+      const wrap = document.createElement('div'); wrap.className = 'match-wrap';
+      wrap.appendChild(left); wrap.appendChild(right);
+      area.appendChild(wrap);
 
-/* --------------------------- PROBLEMES: carregar i llistar (inclou molts del PDF)--------------------------- */
-const problemes = [
-  {q:'Ordena de més concentrada a menys: 20 g solut en 100 g aigua; 50 g en 100 g; 3 g en 100 g; 43 g en 100 g', sol:'50,43,20,3', step:'La concentració creix amb grams de solut per 100 g aigua.'},
-  {q:'S’han dissolt 2 g de sal en 98 g d’aigua. Quin % massa?', sol:'2', step:'massa total 100g → 2/100×100 = 2%.'},
-  {q:'S’han dissolt 35 g de sucre en 120 g d’aigua. Quin % massa?', sol:'22.58', step:'Total =155 g; 35/155×100 =22.58%'},
-  {q:'5 g NaCl en 250 cm³ de dissolució. Quina concentració g/L?', sol:'20', step:'250 cm3 =0.25 L → 5/0.25=20 g/L'},
-  {q:'Preparar 400 cm3 de KCl de 12 g/L. Quina quantitat cal?', sol:'4.8', step:'0.4 L ×12 g/L =4.8 g'},
-  // (afegeix més tal i com vulguis; s'han creat 5 com a exemple)
-];
+      // attach drop handlers
+      area.querySelectorAll('.match-box').forEach(box => {
+        box.addEventListener('dragover', ev => { ev.preventDefault(); box.classList.add('dragover'); });
+        box.addEventListener('dragleave', ev => { box.classList.remove('dragover'); });
+        box.addEventListener('drop', ev => {
+          ev.preventDefault();
+          box.classList.remove('dragover');
+          const txt = ev.dataTransfer.getData('text/plain');
+          box.innerHTML = `<div>${txt}</div>`;
+          box.dataset.assigned = txt;
+        });
+      });
 
-function renderProblemes(){ const area=document.getElementById('problemesArea'); area.innerHTML=''; problemes.forEach((p,i)=>{ const div=document.createElement('div'); div.className='card'; div.innerHTML=`<h3>Problema ${i+1}</h3><p>${p.q}</p><div style='display:flex;gap:.6rem'><input id='ansp${i}' class='input' placeholder='Resposta' /><button class='btn' onclick='checkProblem(${i})'>Comprovar</button></div><div id='pbout${i}' class='small'></div>`; area.appendChild(div); }); }
-renderProblemes();
-function checkProblem(i){ const u=document.getElementById('ansp'+i).value.trim().replace(',','.'); const p=problemes[i]; const out=document.getElementById('pbout'+i); if(Math.abs(Number(u)-Number(p.sol))<0.5 || u.toLowerCase()===p.sol.toLowerCase()){ out.innerText='Correcte!'; award('problemSolver',1); } else out.innerText=`No, la solució esperada: ${p.sol}. Pas: ${p.step}` }
+      // add check button
+      const btn = document.createElement('button'); btn.className = 'btn'; btn.innerText = 'Comprovar';
+      btn.addEventListener('click', ()=>{
+        let ok = 0;
+        area.querySelectorAll('.match-box').forEach(b => {
+          const term = b.dataset.term;
+          const ass = (b.dataset.assigned || '').toLowerCase();
+          if(matchCheck(term, ass)) ok++;
+        });
+        if(ok === 4){ awardPoints(12); unlock('matchMaster'); alert('Perfecte! Relacions correctes. + punts'); }
+        else alert(`${ok}/4 correctes.`);
+      });
+      area.appendChild(btn);
+    }
 
-/* --------------------------- EINES --------------------------- */
-function unlockIfAllVisited(){ const sections = ['apunts','jocs','problemes','logros','config']; let visited = 0; sections.forEach(s=>{ const v = localStorage.getItem('visited_'+s); if(v==='1') visited++; }); if(visited===sections.length) unlock('explorer'); }
-[...document.querySelectorAll('nav button')].forEach(b=> b.addEventListener('click', ()=>{ const id=b.id.replace('btn-',''); localStorage.setItem('visited_'+id,'1'); unlockIfAllVisited(); }));
+    function matchCheck(term, assigned){
+      if(!assigned) return false;
+      if(term === 'Solut') return assigned.includes('dissol');
+      if(term === 'Dissolvent') return assigned.includes('dissol') && !assigned.includes('solut');
+      if(term === 'g/L') return assigned.includes('litre') || assigned.includes('per litre') || assigned.includes('g/l');
+      if(term === '% massa') return assigned.includes('massa');
+      return false;
+    }
 
-/* --------------------------- UI helpers --------------------------- */
-function navTo(id){ nav(id); }
+    function shuffle(a){ return a.sort(()=>Math.random()-0.5); }
 
-/* --------------------------- INITIAL STATE LOAD --------------------------- */
-(function(){ document.getElementById('points').innerText = state.points; document.getElementById('streak').innerText = state.streak; document.getElementById('secrets').innerText = state.secrets; document.getElementById('totalAll').innerText = Object.keys(ACH).length; })();
+    /* ================ GAMES: Calc rapid (ràfega) ============= */
+    let calcRoundCorrect = 0;
+    function startCalcGame(){
+      navTo('jocs');
+      const area = document.getElementById('gameArea');
+      area.innerHTML = '';
+      const box = document.createElement('div'); box.className = 'card';
+      box.innerHTML = `<h3>Ràfega de càlculs</h3><p class="small">Respon 10 preguntes per completar el repte.</p><div id="calcQ"></div><div id="calcMsg" class="muted" style="margin-top:8px"></div>`;
+      area.appendChild(box);
+      newCalcQuestion();
+    }
+    function newCalcQuestion(){
+      const g = Math.floor(Math.random()*45)+5;
+      const ml = Math.floor(Math.random()*1400)+100;
+      const ans = g / (ml/1000);
+      const q = document.getElementById('calcQ');
+      q.innerHTML = `
+        <p>Quina concentració si tens <b>${g} g</b> de solut en <b>${ml} ml</b>?</p>
+        <input id="calcAns" class="input" placeholder="Resposta (g/L)">
+        <div style="height:8px"></div>
+        <div style="display:flex;gap:8px">
+          <button class="btn" id="checkCalcBtn">Comprovar</button>
+          <button class="btn ghost" id="skipCalcBtn">Salt</button>
+        </div>`;
+      document.getElementById('checkCalcBtn').onclick = ()=>{
+        const v = Number(document.getElementById('calcAns').value);
+        if(Math.abs(v - ans) <= 0.6){
+          calcRoundCorrect++; awardPoints(4);
+          state.achievements.quickCalc.times = (state.achievements.quickCalc.times || 0) + 1;
+          if(state.achievements.quickCalc.times >= 10) unlock('quickCalc');
+          saveState(); renderAchievements();
+          if(calcRoundCorrect >= 10){ alert('Repte completat! Felicitats.'); calcRoundCorrect = 0; return; }
+          newCalcQuestion();
+        } else {
+          alert(`No exacte. Solució: ${ans.toFixed(2)} g/L`); resetStreak();
+        }
+      };
+      document.getElementById('skipCalcBtn').onclick = ()=> newCalcQuestion();
+    }
 
-/* --------------------------- DARK MODE --------------------------- */
-function toggleDark(){ document.body.classList.toggle('dark'); unlock('nightOwl'); }
+    /* ================ GAMES: Lab simulator ============== */
+    function startLabGame(){
+      navTo('jocs');
+      const area = document.getElementById('gameArea');
+      area.innerHTML = '';
+      const required = Math.floor(Math.random()*15) + 5; // target g/L
+      const box = document.createElement('div'); box.className = 'card';
+      box.innerHTML = `<h3>Laboratori</h3><p class="small">Objectiu: prepara una dissolució de <b>${required} g/L</b></p>
+        <div style="display:flex;gap:8px">
+          <input id="labG" class="input" placeholder="grams solut">
+          <input id="labML" class="input" placeholder="ml dissolució">
+          <button class="btn" id="labCheck">Comprovar</button>
+        </div>
+        <div id="labOut" class="muted" style="margin-top:8px"></div>`;
+      area.appendChild(box);
+      document.getElementById('labCheck').addEventListener('click', ()=>{
+        const g = Number(document.getElementById('labG').value);
+        const ml = Number(document.getElementById('labML').value);
+        if(!g || !ml){ document.getElementById('labOut').innerText = 'Introdueix valors vàlids'; return; }
+        const got = g / (ml/1000);
+        if(Math.abs(got - required) <= 0.5){
+          document.getElementById('labOut').innerText = `Correcte! Tens ${got.toFixed(2)} g/L`;
+          awardPoints(10); unlock('labWizard');
+        } else {
+          document.getElementById('labOut').innerText = `Tens ${got.toFixed(2)} g/L; objectiu ${required} g/L`;
+          resetStreak();
+        }
+      });
+    }
 
-/* --------------------------- UTILS --------------------------- */
-function shuffleArr(a){ return a.sort(()=>Math.random()-0.5); }
+    /* ================ GAMES: Timed challenge ============= */
+    function startTimedGame(){
+      navTo('jocs');
+      const area = document.getElementById('gameArea');
+      area.innerHTML = '';
+      const box = document.createElement('div'); box.className = 'card';
+      box.innerHTML = `<h3>Repte cronometrat</h3><p class="small">Resol 5 preguntes en 60 segons.</p>
+        <div id="timedQ"></div>
+        <div style="height:8px"></div>
+        <div id="timedTimer" class="muted"></div>`;
+      area.appendChild(box);
+      let timeLeft = 60; let solved = 0; const timerEl = document.getElementById('timedTimer');
+      const timer = setInterval(()=>{ timeLeft--; timerEl.innerText = `Temps: ${timeLeft}s`; if(timeLeft<=0){ clearInterval(timer); alert('Temps acabat!'); } }, 1000);
+      nextTimed();
 
-</script>
+      function nextTimed(){
+        if(solved >= 5){ clearInterval(timer); alert('Repte completat!'); awardPoints(20); unlock('speedy'); return; }
+        const g = Math.floor(Math.random()*40)+5; const ml = Math.floor(Math.random()*900)+100; const ans = g / (ml/1000);
+        document.getElementById('timedQ').innerHTML = `<p>${g} g en ${ml} ml → ? g/L</p><input id="tans" class="input" placeholder="Resposta"><div style="height:8px"></div><button class="btn" id="tcheck">Comprovar</button>`;
+        document.getElementById('tcheck').onclick = ()=>{
+          const u = Number(document.getElementById('tans').value);
+          if(Math.abs(u - ans) <= 0.7){ solved++; awardPoints(5); nextTimed(); } else { alert('No correcte'); resetStreak(); }
+        };
+      }
+    }
 
+    /* ================ GAMES: Fill the blank ============ */
+    function startFillGame(){
+      navTo('jocs');
+      const area = document.getElementById('gameArea');
+      area.innerHTML = '';
+      const html = `<div class="card"><h3>Omple els buits</h3><p class="small">Completa la frase:</p>
+        <p>La concentració en g/L es calcula com <input id="fb1" class="input" style="width:100px;display:inline-block"> ÷ <input id="fb2" class="input" style="width:100px;display:inline-block"></p>
+        <div style="height:8px"></div>
+        <button class="btn" id="fbCheck">Comprovar</button>
+        <div id="fbOut" class="muted" style="margin-top:8px"></div></div>`;
+      area.innerHTML = html;
+      document.getElementById('fbCheck').addEventListener('click', ()=>{
+        const a = document.getElementById('fb1').value.toLowerCase();
+        const b = document.getElementById('fb2').value.toLowerCase();
+        if((a.includes('g') || a.includes('grams') ) && (b.includes('l') || b.includes('litre'))) { document.getElementById('fbOut').innerText = 'Correcte!'; awardPoints(4); unlock('matchMaster'); }
+        else { document.getElementById('fbOut').innerText = 'Tracta de pensar en grams i litres.'; resetStreak(); }
+      });
+    }
+
+    /* ================ RENDER / WIRING GAMES ============ */
+    document.getElementById('tileMatch').addEventListener('click', startMatchGame);
+    document.getElementById('tileCalc').addEventListener('click', startCalcGame);
+    document.getElementById('tileLab').addEventListener('click', startLabGame);
+    document.getElementById('tileTimed').addEventListener('click', startTimedGame);
+    document.getElementById('tileFill').addEventListener('click', startFillGame);
+
+    /* ================ RENDER ACHIEVEMENTS INIT ========== */
+    renderAchievements();
+    updateSidebar();
+
+    /* ================ SAVE STATE PERIODIC =============== */
+    window.addEventListener('beforeunload', saveState);
+
+    /* ================ HELPER UTILS =================== */
+    function randRange(min, max){ return Math.floor(Math.random()*(max-min+1))+min; }
+
+    /* ================ INIT APPLY SAVED PALETTE ======== */
+    if(state.palette && state.palette !== 'default'){ applyOnLoadPalette(state.palette); }
+    function applyOnLoadPalette(name){
+      if(name === 'menta') setVariables('#e6fbf7', '#d3fff6', '#48d8b4', '#7afbe6');
+      else if(name === 'magma') setVariables('#fff3ee', '#fff6ec', '#ff5a3d', '#ffb36e');
+      else setVariables('#f4f7ff', '#edf5ff', '#4d6bff', '#5dd4c6');
+    }
+    function setVariables(bg1,bg2,accent,accent2){
+      document.documentElement.style.setProperty('--bg-a', bg1);
+      document.documentElement.style.setProperty('--bg-b', bg2);
+      document.documentElement.style.setProperty('--accent', accent);
+      document.documentElement.style.setProperty('--accent2', accent2);
+      document.body.style.background = `linear-gradient(180deg, ${bg1}, ${bg2})`;
+    }
+
+    // palette apply buttons
+    document.querySelectorAll('button[data-palette]').forEach(btn => {
+      btn.addEventListener('click', ()=> {
+        const p = btn.dataset.palette;
+        if(p === 'menta') setVariables('#e6fbf7','#d3fff6','#48d8b4','#7afbe6');
+        else if(p === 'magma') setVariables('#fff3ee','#fff6ec','#ff5a3d','#ffb36e');
+        else setVariables('#f4f7ff','#edf5ff','#4d6bff','#5dd4c6');
+        state.palette = p; saveState(); unlock('paletteStylist'); renderAchievements();
+      });
+    });
+
+    /* ================ INITIAL VISIT MARKERS ============ */
+    // mark apunts visited on load
+    localStorage.setItem('visited_apunts', '1');
+    checkExplorer();
+
+  </script>
 </body>
 </html>
